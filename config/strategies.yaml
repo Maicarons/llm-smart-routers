@@ -1,0 +1,29 @@
+# 路由策略配置
+strategies:
+  - name: "manual"
+    type: "manual"
+    config:
+      model: "gpt-4o"
+      fallbacks: ["claude-3-5-sonnet", "gemini-1.5-pro"]
+
+  - name: "failover"
+    type: "failover"
+    config:
+      primary: "gpt-4o"
+      secondaries: ["claude-3-5-sonnet", "gemini-1.5-pro"]
+
+  - name: "cost_optimized"
+    type: "cost_optimized"
+    config:
+      min_capability: 7.0
+      max_budget_per_call: 0.01
+
+  - name: "task_aware"
+    type: "task_aware"
+    config:
+      scoring:
+        capability_weight: 0.4
+        price_weight: 0.2
+        latency_weight: 0.2
+        quality_weight: 0.15
+        health_weight: 0.05

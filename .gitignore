@@ -1,0 +1,21 @@
+/target
+.env
+*.duckdb
+data/
+node_modules/
+dist/
+.vitepress/dist/
+*.log
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.mimosa/
+
+# Rust
+**/*.rs.bk
+
+# OS
+.DS_Store
+Thumbs.db

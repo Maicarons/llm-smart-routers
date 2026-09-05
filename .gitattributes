@@ -1,0 +1,24 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Rust
+*.rs text diff=rust
+
+# YAML
+*.yaml text
+*.yml text
+
+# Markdown
+*.md text
+
+# JSON
+*.json text
+
+# Shell
+*.sh text eol=lf
+
+# Batch
+*.bat text eol=crlf
+
+# License
+LICENSE text

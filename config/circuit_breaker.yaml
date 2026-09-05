@@ -1,0 +1,37 @@
+# 熔断器配置
+circuit_breaker:
+  sliding_window:
+    size_seconds: 120
+    bucket_count: 12
+
+  error_thresholds:
+    timeout:
+      trigger: 0.15
+      severity: 0.4
+    rate_limit:
+      trigger: 0.10
+      severity: 0.3
+    server_error:
+      trigger: 0.05
+      severity: 0.5
+    auth_error:
+      trigger: 0.01
+      severity: 0.8
+
+  latency_trend:
+    ewma_alpha: 0.3
+    acceleration_windows: 3
+    p95_threshold_ms: 5000
+
+  scoring:
+    error_rate_weight: 0.4
+    latency_weight: 0.3
+    trend_weight: 0.2
+    slo_weight: 0.1
+
+  probing:
+    enabled: true
+    interval_healthy_sec: 30
+    interval_unstable_sec: 5
+    probe_timeout_ms: 3000
+    recovery_success_count: 2

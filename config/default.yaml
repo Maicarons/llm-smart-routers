@@ -1,0 +1,32 @@
+# LLM Smart Router 默认配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+storage:
+  duckdb:
+    path: "data/smart_router.duckdb"
+    auto_archive: true
+    archive_threshold_days: 30
+  cache:
+    enabled: true
+    ttl_default_sec: 300
+    max_capacity: 10000
+  json_config:
+    path: "data/config/"
+    auto_reload: true
+
+auth:
+  api_keys:
+    - key: "sk-local-dev"
+      name: "default"
+
+router:
+  default_strategy: "failover"
+  strategies:
+    - name: "manual"
+      type: "manual"
+    - name: "failover"
+      type: "failover"
+    - name: "load_balance"
+      type: "load_balance"
