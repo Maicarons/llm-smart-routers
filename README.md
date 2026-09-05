@@ -2,6 +2,10 @@
 
 > **次世代智能 AI 路由引擎** — 高性能、多协议统一、智能熔断，实时为用户选择最优模型。
 
+[![CI](https://github.com/Maicarons/llm-smart-routers/actions/workflows/ci.yml/badge.svg)](https://github.com/Maicarons/llm-smart-routers/actions/workflows/ci.yml)
+[![Docs](https://github.com/Maicarons/llm-smart-routers/actions/workflows/docs.yml/badge.svg)](https://maicarons.github.io/llm-smart-routers/)
+[![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+
 ---
 
 ## 目录
@@ -758,7 +762,7 @@ llm-smart-routers/
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-org/llm-smart-routers
+git clone https://github.com/Maicarons/llm-smart-routers
 cd llm-smart-routers
 
 # 直接启动，无需任何外部服务

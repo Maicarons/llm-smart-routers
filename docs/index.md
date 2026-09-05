@@ -15,7 +15,7 @@ hero:
       link: /architecture/overview
     - theme: alt
       text: GitHub
-      link: https://github.com/your-org/llm-smart-routers
+      link: https://github.com/Maicarons/llm-smart-routers
 
 features:
   - title: 🚀 零外部依赖

@@ -1,54 +1,43 @@
 {
   "schema_version": "mimosa-task-review/v2",
-  "run_id": "20260905T172428483Z-36900-f5d8abd7b76d",
-  "run_status": "inconclusive",
-  "errors": [
-    {
-      "stage": "candidate-select",
-      "target": "tests/benchmarks/gateway_bench.rs",
-      "reason": "changed_file_unreadable: observed changed file no longer exists or cannot be read"
-    },
-    {
-      "stage": "candidate-select",
-      "target": "crates/router-engine/src/strategies/plugin.rs",
-      "reason": "candidate_limit_exceeded: 1 changed reviewable file(s) were not scanned because the limit is 20"
-    }
-  ],
+  "run_id": "20260905T175206418Z-21208-ca0b8bb9eb65",
+  "run_status": "completed",
+  "errors": [],
   "coverage": {
     "schema_version": "mimosa-hook-coverage/v1",
-    "status": "partial",
+    "status": "complete",
     "scope": "hook_observed_diff",
     "baseline": {
       "complete": true,
-      "captured_files": 60,
+      "captured_files": 68,
       "candidate_limit": 5000,
       "truncated": false,
       "enumeration_error_count": 0,
       "snapshot_error_count": 0,
-      "compensated_target_count": 21
+      "compensated_target_count": 7
     },
     "change_tracking": {
-      "touched_observed": 22,
-      "touched_retained": 22,
+      "touched_observed": 7,
+      "touched_retained": 7,
       "truncated": false,
-      "bash_mutation": false,
-      "bash_discovered": 0,
+      "bash_mutation": true,
+      "bash_discovered": 7,
       "bash_discovery_limit": 80,
       "bash_discovery_truncated": false
     },
     "candidates": {
-      "eligible_files": 21,
-      "selected_files": 20,
+      "eligible_files": 7,
+      "selected_files": 7,
       "limit": 20,
-      "truncated": true
+      "truncated": false
     },
     "scanning": {
-      "required_files": 18,
-      "scanned_files": 18,
+      "required_files": 7,
+      "scanned_files": 7,
       "skipped_files": 0,
       "failed_files": 0,
-      "project_checks_required": 1,
-      "project_checks_completed": 1
+      "project_checks_required": 0,
+      "project_checks_completed": 0
     },
     "notification": {
       "eligible_findings": 0,
@@ -56,423 +45,155 @@
       "detail_limit": 3,
       "truncated": false
     },
-    "reason_counts": {
-      "changed_file_unreadable": 1,
-      "candidate_limit_exceeded": 1,
-      "project_check_failed": 2
-    },
-    "reasons": [
-      {
-        "code": "changed_file_unreadable",
-        "stage": "candidate-select",
-        "target": "tests/benchmarks/gateway_bench.rs",
-        "detail": "observed changed file no longer exists or cannot be read",
-        "affects_completion": true
-      },
-      {
-        "code": "candidate_limit_exceeded",
-        "stage": "candidate-select",
-        "target": "crates/router-engine/src/strategies/plugin.rs",
-        "detail": "1 changed reviewable file(s) were not scanned because the limit is 20",
-        "affects_completion": true
-      },
-      {
-        "code": "project_check_failed",
-        "stage": "candidate-select",
-        "target": "tests/benchmarks/gateway_bench.rs",
-        "detail": "changed_file_unreadable: observed changed file no longer exists or cannot be read",
-        "affects_completion": true
-      },
-      {
-        "code": "project_check_failed",
-        "stage": "candidate-select",
-        "target": "crates/router-engine/src/strategies/plugin.rs",
-        "detail": "candidate_limit_exceeded: 1 changed reviewable file(s) were not scanned because the limit is 20",
-        "affects_completion": true
-      }
-    ],
+    "reason_counts": {},
+    "reasons": [],
     "reasons_truncated": false
   },
-  "generated_at": "2026-09-05T17:24:28.483Z",
+  "generated_at": "2026-09-05T17:52:06.418Z",
   "session_id": "sess_4325e14d-5897-4727-bdda-b8771f05ee25",
   "target": ".",
-  "revision": "2ccca0c4896e9634ce341d3dae02cfcddbb40bcd",
+  "revision": "b9f033d5d2d572c2c142aeaa8dbfdd259fa17206",
   "rules_version": "unavailable",
-  "diff_hash": "dae623325c989070b0cf88cf5d21997613a3ab13a88bb16047ac84313ce5ccaf",
+  "diff_hash": "4c2332758ee9a3d2dee8e48ff057019ddc87fa8e5c5e42c0237ef26006972a3f",
   "diff": {
     "algorithm": "sha256",
-    "changed_file_count": 20,
+    "changed_file_count": 7,
     "changed_files": [
       {
-        "file": "benches/bench.rs",
+        "file": "crates/gateway/src/main.rs",
         "ranges": [
           {
-            "start": 1,
-            "end": 49
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "16264831894605a72bf3397b2bc0dfbdf934f3eaca446fc3c53d98f8867c30b0"
-      },
-      {
-        "file": "Cargo.toml",
-        "ranges": [
-          {
-            "start": 36,
-            "end": 39
-          }
-        ],
-        "before_hash": "7b3717babf6ecedc9e0ce626109183fd91f970b1df6680f8cb2294784965f4c3",
-        "after_hash": "2d8e102de9afd054ee62661462ebdb9083323ca2808051cc49e1168d1979db00"
-      },
-      {
-        "file": "crates/circuit-breaker/src/lib.rs",
-        "ranges": [
-          {
-            "start": 5,
-            "end": 5
+            "start": 50,
+            "end": 63
           },
+          {
+            "start": 66,
+            "end": 66
+          }
+        ],
+        "before_hash": "dc13d15d749684bdeb106172758a6553d59caf4d1323fc3f6ff4e580ecdd7a5e",
+        "after_hash": "0f166259083a16a5bc2d91b76e37dda220ca04668270bbc291c6da7c1d355977"
+      },
+      {
+        "file": "crates/gateway/src/routes/admin.rs",
+        "ranges": [
+          {
+            "start": 20,
+            "end": 20
+          },
+          {
+            "start": 26,
+            "end": 26
+          },
+          {
+            "start": 33,
+            "end": 33
+          }
+        ],
+        "before_hash": "7726556e0c5777df363ca8cd9bf560ab66ebd1f5fdd27cd9f3dbf6af134dbed7",
+        "after_hash": "a4192f65cd0469b24b1b710ef38e229bde566db5452d3be831db322276430863"
+      },
+      {
+        "file": "crates/gateway/tests/integration_real.rs",
+        "ranges": [
+          {
+            "start": 84,
+            "end": 92
+          },
+          {
+            "start": 154,
+            "end": 158
+          },
+          {
+            "start": 191,
+            "end": 195
+          },
+          {
+            "start": 212,
+            "end": 212
+          }
+        ],
+        "before_hash": "782bac80f11ce381ab4152346f7cd59d796e907bca7a4b195c0975bd7d8da36b",
+        "after_hash": "0eb8f94ba7e24e870a5ca64725dc74360db38e493e166695a0cdc8cc187ccfea"
+      },
+      {
+        "file": "crates/provider/src/adapters/anthropic.rs",
+        "ranges": [
           {
             "start": 12,
             "end": 12
           },
           {
-            "start": 19,
-            "end": 19
+            "start": 16,
+            "end": 16
           },
           {
-            "start": 22,
-            "end": 23
-          },
-          {
-            "start": 31,
-            "end": 31
-          },
-          {
-            "start": 33,
-            "end": 34
-          },
-          {
-            "start": 55,
-            "end": 65
-          },
-          {
-            "start": 71,
-            "end": 71
-          },
-          {
-            "start": 81,
-            "end": 85
-          },
-          {
-            "start": 95,
-            "end": 95
-          },
-          {
-            "start": 101,
-            "end": 103
-          },
-          {
-            "start": 147,
-            "end": 149
-          }
-        ],
-        "before_hash": "194794704f68b397dc14f164e6511efe3657538562f8f17e4ceddc9ccfe1614a",
-        "after_hash": "514ca244c06b214dbff254855a5b1000895e28ffe9eb0aa32cf2398a71219deb"
-      },
-      {
-        "file": "crates/circuit-breaker/src/prober.rs",
-        "ranges": [
-          {
-            "start": 1,
-            "end": 10
-          },
-          {
-            "start": 13,
-            "end": 13
-          },
-          {
-            "start": 18,
-            "end": 21
-          },
-          {
-            "start": 25,
+            "start": 21,
             "end": 30
           },
           {
-            "start": 32,
-            "end": 32
+            "start": 76,
+            "end": 76
+          }
+        ],
+        "before_hash": "d4a7538044c041dfe218c72c200d24e27cfff4ec12f8081ba93cb7da430522df",
+        "after_hash": "4c14a2b5e54a1c06bf56b6e4e5ac7b110b821d3cc1ff3b4ad047579caed62e72"
+      },
+      {
+        "file": "crates/provider/src/adapters/mod.rs",
+        "ranges": [
+          {
+            "start": 8,
+            "end": 9
           },
           {
-            "start": 34,
-            "end": 34
-          },
-          {
-            "start": 39,
-            "end": 53
-          },
-          {
-            "start": 56,
-            "end": 64
-          },
-          {
-            "start": 68,
-            "end": 93
+            "start": 13,
+            "end": 14
           }
         ],
-        "before_hash": "e9ad8bd1b36f302c9ddcfe56bbf3999ab2b199cce146e21813e13e452a3edc85",
-        "after_hash": "d4bbe4f33c99ec65106c599a4bfd78802e62764dd093964eb1044387b9ac75bb"
+        "before_hash": "43ec486e65e8b6ba057bb96631516509cd0be22071feb12dcb01c38bdf2e4c3d",
+        "after_hash": "62724e3552dec501f09c3d5a217953752b3121d57ece0836f3fc124fa7b705d1"
       },
       {
-        "file": "crates/circuit-breaker/src/trend_detector.rs",
+        "file": "crates/provider/src/adapters/openai.rs",
         "ranges": [
           {
-            "start": 1,
-            "end": 147
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "3aada5db4aa395a233cdf020d7e2265f933c0ea25c6801fc7a6e3a57ec2469ed"
-      },
-      {
-        "file": "crates/gateway/src/routes/chat_completions.rs",
-        "ranges": [
-          {
-            "start": 28,
-            "end": 28
-          }
-        ],
-        "before_hash": "1233f12d67f4188afa8e3ba8c16b3f244417413beaca9d15966026cf495ecce2",
-        "after_hash": "5100b033d80b3b4dc470b075f237f5853ef3d17985c0f78efc4567302cda0953"
-      },
-      {
-        "file": "crates/gateway/src/routes/messages.rs",
-        "ranges": [
-          {
-            "start": 28,
-            "end": 28
-          }
-        ],
-        "before_hash": "61fd2ea19d0cda496b8d5594f400d9b6a8d27472996180f0c42b8f1f237e2160",
-        "after_hash": "2ef075af52884dd5092806b37ea0ab695f09e20d660a9897422494ac9fe34aac"
-      },
-      {
-        "file": "crates/gateway/src/routes/responses.rs",
-        "ranges": [
-          {
-            "start": 28,
-            "end": 28
-          }
-        ],
-        "before_hash": "ccf4eabdbef5642c80f1d173ea348309a83a820c8f3fbb9432121698768ad5b7",
-        "after_hash": "671356f4da47a9a129a92aaffd62bc5ee706415da80e3b9983d7b07576de8a96"
-      },
-      {
-        "file": "crates/router-engine/Cargo.toml",
-        "ranges": [
-          {
-            "start": 11,
-            "end": 11
-          },
-          {
-            "start": 20,
-            "end": 21
-          }
-        ],
-        "before_hash": "ba13b595a9edc9fbe928b79597eb785727851ff754d1417e9c60762354ef5e13",
-        "after_hash": "ea402b5d4f0f20b003ac0890c27b51d1e1ba0cccacaa7a04427781ecd39c0955"
-      },
-      {
-        "file": "crates/router-engine/src/adaptive.rs",
-        "ranges": [
-          {
-            "start": 1,
-            "end": 174
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "19460f3cd35f9787a93c71ed18fb22bf0c937129794f2c52fb9ddbe139fe8f01"
-      },
-      {
-        "file": "crates/router-engine/src/classifier.rs",
-        "ranges": [
-          {
-            "start": 1,
-            "end": 337
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "60d8ec2651d88886b0936cd8183c8a47af9a33da4bd8b6548d584301ef9aae8d"
-      },
-      {
-        "file": "crates/router-engine/src/lib.rs",
-        "ranges": [
-          {
-            "start": 4,
-            "end": 6
-          },
-          {
-            "start": 9,
+            "start": 12,
             "end": 12
-          }
-        ],
-        "before_hash": "7539232821a10765a50d088f697547be5e6b7e053c8db9f5b673e924586eaba0",
-        "after_hash": "7f47e82d7c5474520f44e72125a02e7d8ca4931939b5fdc14f3b411e50f7344e"
-      },
-      {
-        "file": "crates/router-engine/src/models.rs",
-        "ranges": [
-          {
-            "start": 2,
-            "end": 2
           },
           {
-            "start": 10,
-            "end": 10
+            "start": 16,
+            "end": 16
           },
           {
-            "start": 20,
-            "end": 20
+            "start": 21,
+            "end": 30
+          },
+          {
+            "start": 91,
+            "end": 91
           }
         ],
-        "before_hash": "00cf37360d23b969579afabb4d7c73a9deb56b2d1222f07af2e3238b19e2ce0e",
-        "after_hash": "b64fae6a92075d7a06fb6bf6c5f7aedad563594650960e6b1b681d20a02d86d2"
+        "before_hash": "e9a0f17f0180839d4eb24676b49da14ebf574e172244db98848bdfa918b1970b",
+        "after_hash": "df1ad83c2fcefdd6810dcb644623be475aed3311a72e55a9ba945e2febe8f922"
       },
       {
         "file": "crates/router-engine/src/pipeline.rs",
         "ranges": [
           {
-            "start": 12,
-            "end": 12
-          },
-          {
-            "start": 14,
-            "end": 14
-          },
-          {
-            "start": 22,
-            "end": 22
-          },
-          {
-            "start": 34,
-            "end": 34
-          },
-          {
-            "start": 41,
-            "end": 41
-          },
-          {
-            "start": 48,
-            "end": 48
-          },
-          {
-            "start": 60,
-            "end": 72
-          },
-          {
-            "start": 81,
-            "end": 85
-          }
-        ],
-        "before_hash": "86827e99bdf1ec16f6e670ac9d6cf322dda473cd91d2e8007d4ca5c63e394263",
-        "after_hash": "2196375dd2dc90e4a373ee16841349d6d4a8064e930e91e25ac45de01d26af40"
-      },
-      {
-        "file": "crates/router-engine/src/scorer.rs",
-        "ranges": [
-          {
-            "start": 1,
-            "end": 262
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "a46269d96d769f5e43e1d41d82daff00fb497b06cd4c21f25d5fcee504d95096"
-      },
-      {
-        "file": "crates/router-engine/src/strategies/failover.rs",
-        "ranges": [
-          {
-            "start": 36,
-            "end": 36
-          },
-          {
-            "start": 47,
-            "end": 47
-          },
-          {
-            "start": 71,
-            "end": 71
-          },
-          {
-            "start": 88,
-            "end": 88
-          }
-        ],
-        "before_hash": "21b12b6cfcb16dbb672ec2b263aa1776a469a4ce3ea4cc0a578985e04cbd8faf",
-        "after_hash": "328cd10cf86dcaa6450d7f9f6ad0285b8f35852b961984f52df5792bc8bdb941"
-      },
-      {
-        "file": "crates/router-engine/src/strategies/load_balance.rs",
-        "ranges": [
-          {
             "start": 38,
             "end": 38
-          },
-          {
-            "start": 59,
-            "end": 59
           }
         ],
-        "before_hash": "6351c43034a76e44d9fa8aab25f617f634fd549a298c128a6b7acd64bf3d1f03",
-        "after_hash": "75576391905073a19141ae855f3ffd8498d6de926c1bdfc7e4e8b291b4828104"
-      },
-      {
-        "file": "crates/router-engine/src/strategies/manual.rs",
-        "ranges": [
-          {
-            "start": 40,
-            "end": 40
-          },
-          {
-            "start": 51,
-            "end": 51
-          },
-          {
-            "start": 62,
-            "end": 62
-          }
-        ],
-        "before_hash": "2fe70f015712b59a221111d4c01590ea1ce7119add4014439fdcf87c3bbeee5d",
-        "after_hash": "6c7ad386082b9eb3d441e0e8977d5a9ce375a8c52bbca73e5f6b86759f6132e2"
-      },
-      {
-        "file": "crates/router-engine/src/strategies/mod.rs",
-        "ranges": [
-          {
-            "start": 4,
-            "end": 5
-          }
-        ],
-        "before_hash": "c92d21896016ade80dc969692f8511376a8a11c5ebd281f3ef307c7c13541880",
-        "after_hash": "a19a094d8c8d1baeebd4cb651505e4c7216b7548fe698454debc504fa0c77063"
-      },
-      {
-        "file": "crates/router-engine/src/strategies/task_aware.rs",
-        "ranges": [
-          {
-            "start": 1,
-            "end": 102
-          }
-        ],
-        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "after_hash": "c942c0873a020c483d3e7f68ec87aeae0ebb7d1a273e1b962b3db44017583df3"
+        "before_hash": "2196375dd2dc90e4a373ee16841349d6d4a8064e930e91e25ac45de01d26af40",
+        "after_hash": "8e24d7fa967691b3e63260a5120acdb9901b4b363af65b1bb8667f0d5f6a6894"
       }
     ]
   },
   "timing": {
-    "started_at": "2026-09-05T17:24:26.046Z",
-    "completed_at": "2026-09-05T17:24:28.483Z",
-    "duration_ms": 2437,
+    "started_at": "2026-09-05T17:52:05.362Z",
+    "completed_at": "2026-09-05T17:52:06.418Z",
+    "duration_ms": 1056,
     "measurement": "hook_wall_clock"
   },
   "tokens": {
@@ -486,11 +207,11 @@
     "schemaVersion": "mimosa-gate-telemetry/v1",
     "profile": "gate",
     "operation": "Stop",
-    "outcome": "partial/INCONCLUSIVE",
-    "latencyMs": 2437,
-    "peakMemoryBytes": 128045056,
+    "outcome": "complete",
+    "latencyMs": 1056,
+    "peakMemoryBytes": 130924544,
     "memoryMeasurement": "max-observed-process-rss",
-    "scannedFiles": 18,
+    "scannedFiles": 7,
     "cache": {
       "hits": 0,
       "misses": 0,
@@ -515,8 +236,8 @@
   "finding_events": [],
   "findings": [],
   "artifacts": {
-    "immutable_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25-20260905T172428483Z-36900-f5d8abd7b76d.json",
+    "immutable_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25-20260905T175206418Z-21208-ca0b8bb9eb65.json",
     "latest_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25.json",
-    "history_summary": ".mimosa/history/run-20260905T172428483Z-36900-f5d8abd7b76d.json"
+    "history_summary": ".mimosa/history/run-20260905T175206418Z-21208-ca0b8bb9eb65.json"
   }
 }

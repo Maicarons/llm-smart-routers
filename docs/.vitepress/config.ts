@@ -62,7 +62,7 @@ export default defineConfig({
       ],
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/your-org/llm-smart-routers' }
+      { icon: 'github', link: 'https://github.com/Maicarons/llm-smart-routers' }
     ],
     footer: {
       message: 'AGPL-3.0 License',

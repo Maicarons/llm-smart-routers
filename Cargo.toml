@@ -13,7 +13,7 @@ members = [
 version = "0.1.0"
 edition = "2021"
 license = "AGPL-3.0"
-repository = "https://github.com/your-org/llm-smart-routers"
+repository = "https://github.com/Maicarons/llm-smart-routers"
 
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }
