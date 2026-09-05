@@ -9,6 +9,7 @@ use super::strategies::{
     manual::ManualStrategy,
     failover::FailoverStrategy,
     load_balance::LoadBalanceStrategy,
+    task_aware::TaskAwareStrategy,
 };
 use super::classifier::Classifier;
 
@@ -30,6 +31,7 @@ impl RouterEngine {
         strategies.insert("manual".to_string(), Box::new(ManualStrategy::default()));
         strategies.insert("failover".to_string(), Box::new(FailoverStrategy::default()));
         strategies.insert("load_balance".to_string(), Box::new(LoadBalanceStrategy::default()));
+        strategies.insert("task_aware".to_string(), Box::new(TaskAwareStrategy::default()));
 
         Self {
             strategies,

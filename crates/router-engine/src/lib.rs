@@ -2,7 +2,9 @@ pub mod pipeline;
 pub mod strategies;
 pub mod models;
 pub mod classifier;
+pub mod scorer;
 
 pub use pipeline::*;
 pub use models::*;
 pub use classifier::*;
+pub use scorer::*;

@@ -56,6 +56,7 @@ mod tests {
             strategy_name: None,
             max_tokens: None,
             temperature: None,
+            task_type: None,
         };
 
         let d1 = strategy.select(&models, &context).await.unwrap();

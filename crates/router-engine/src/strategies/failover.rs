@@ -68,6 +68,7 @@ mod tests {
             strategy_name: None,
             max_tokens: None,
             temperature: None,
+            task_type: None,
         };
         let decision = strategy.select(&models, &context).await.unwrap();
         assert_eq!(decision.model, "gpt-4o");
@@ -84,6 +85,7 @@ mod tests {
             strategy_name: None,
             max_tokens: None,
             temperature: None,
+            task_type: None,
         };
         let decision = strategy.select(&models, &context).await.unwrap();
         assert_eq!(decision.model, "claude-3-5-sonnet");

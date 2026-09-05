@@ -1,6 +1,7 @@
 pub mod manual;
 pub mod failover;
 pub mod load_balance;
+pub mod task_aware;
 
 use async_trait::async_trait;
 use llm_smart_router_provider::registry::ModelInfo;

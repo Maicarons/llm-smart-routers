@@ -17,6 +17,7 @@ pub struct RouteContext {
     pub strategy_name: Option<String>,
     pub max_tokens: Option<u32>,
     pub temperature: Option<f32>,
+    pub task_type: Option<TaskType>,
 }
 
 /// 策略配置（从 JSON 加载）

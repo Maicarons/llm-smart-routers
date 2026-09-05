@@ -25,6 +25,7 @@ pub async fn handler(
         strategy_name: None,
         max_tokens: unified.max_tokens,
         temperature: unified.temperature,
+        task_type: None,
     };
 
     let decision = state.router.route(&unified, &context).await.map_err(|e| {
