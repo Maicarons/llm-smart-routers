@@ -17,17 +17,20 @@ pub async fn register_provider(
         (StatusCode::BAD_REQUEST, Json(json!({"error": format!("invalid config: {}", e)})))
     })?;
 
+    let model_ids: Vec<String> = config.models.iter().map(|m| m.id.clone()).collect();
     let adapter = match config.name.as_str() {
         "openai" | "OpenAI" => {
             llm_smart_router_provider::adapters::create_openai(
                 config.api_key.clone(),
                 Some(config.api_base_url.clone()),
+                model_ids,
             )
         }
         "anthropic" | "Anthropic" => {
             llm_smart_router_provider::adapters::create_anthropic(
                 config.api_key.clone(),
                 Some(config.api_base_url.clone()),
+                model_ids,
             )
         }
         _ => {
