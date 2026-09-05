@@ -35,7 +35,7 @@ impl RouterEngine {
 
         Self {
             strategies,
-            default_strategy: "failover".to_string(),
+            default_strategy: "manual".to_string(),
             breaker,
             registry,
             classifier: Classifier::new(),
