@@ -35,6 +35,7 @@ impl Strategy for LoadBalanceStrategy {
             provider: m.provider.clone(),
             model: m.id.clone(),
             confidence: 0.7,
+            task_type: None,
         })
     }
 }

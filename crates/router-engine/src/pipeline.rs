@@ -10,6 +10,7 @@ use super::strategies::{
     failover::FailoverStrategy,
     load_balance::LoadBalanceStrategy,
 };
+use super::classifier::Classifier;
 
 /// 路由引擎
 pub struct RouterEngine {
@@ -17,6 +18,7 @@ pub struct RouterEngine {
     default_strategy: String,
     pub breaker: Arc<CircuitBreaker>,
     pub registry: Arc<ProviderRegistry>,
+    pub classifier: Classifier,
 }
 
 impl RouterEngine {
@@ -34,13 +36,14 @@ impl RouterEngine {
             default_strategy: "failover".to_string(),
             breaker,
             registry,
+            classifier: Classifier::new(),
         }
     }
 
     /// 执行路由决策
     pub async fn route(
         &self,
-        _request: &UnifiedRequest,
+        request: &UnifiedRequest,
         context: &RouteContext,
     ) -> anyhow::Result<RouteDecision> {
         let strategy_name = context.strategy_name.as_deref().unwrap_or(&self.default_strategy);
@@ -52,6 +55,19 @@ impl RouterEngine {
             return Err(anyhow::anyhow!("no providers registered"));
         }
 
+        // 分析任务类型
+        let user_text = request.messages.iter()
+            .filter(|m| matches!(m.role, llm_smart_router_protocol::UnifiedRole::User))
+            .map(|m| match &m.content {
+                llm_smart_router_protocol::UnifiedContent::Text(t) => t.clone(),
+                _ => String::new(),
+            })
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        let classification = self.classifier.classify(&user_text);
+        tracing::debug!("task classification: {:?} (confidence: {:.2})", classification.primary_type.name(), classification.confidence);
+
         let available_models: Vec<ModelInfo> = models.into_iter()
             .filter(|m| self.breaker.check(&m.id).is_ok())
             .collect();
@@ -60,7 +76,11 @@ impl RouterEngine {
             return Err(anyhow::anyhow!("no available models"));
         }
 
-        strategy.select(&available_models, context).await
+        let mut decision = strategy.select(&available_models, context).await?;
+        // 注入任务类型信息
+        decision.task_type = Some(classification.primary_type);
+
+        Ok(decision)
     }
 
     /// 注册自定义策略

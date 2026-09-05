@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use super::classifier::TaskType;
 
 /// 路由决策
 #[derive(Debug, Clone)]
@@ -6,6 +7,7 @@ pub struct RouteDecision {
     pub provider: String,
     pub model: String,
     pub confidence: f64,
+    pub task_type: Option<TaskType>,
 }
 
 /// 路由上下文

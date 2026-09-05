@@ -33,6 +33,7 @@ impl Strategy for FailoverStrategy {
                     provider: m.provider.clone(),
                     model: m.id.clone(),
                     confidence: 1.0,
+                    task_type: None,
                 });
             }
         }
@@ -43,6 +44,7 @@ impl Strategy for FailoverStrategy {
                 provider: m.provider.clone(),
                 model: m.id.clone(),
                 confidence: 0.5,
+                task_type: None,
             });
         }
 

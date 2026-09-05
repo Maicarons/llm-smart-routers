@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-05T17:09:14.055Z",
+  "recordedAt": "2026-09-05T17:13:15.131Z",
   "sessionId": "sess_4325e14d-5897-4727-bdda-b8771f05ee25",
   "event": "PostToolUse",
   "toolName": "Edit",
-  "file": ".gitignore",
+  "file": "crates/router-engine/src/classifier.rs",
   "outcome": "clear",
   "coverage": "complete",
   "findingCount": 0,
-  "durationMs": 3,
+  "durationMs": 7,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }
