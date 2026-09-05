@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-05T17:21:58.923Z",
+  "recordedAt": "2026-09-05T17:23:45.846Z",
   "sessionId": "sess_4325e14d-5897-4727-bdda-b8771f05ee25",
   "event": "PostToolUse",
-  "toolName": "Write",
-  "file": "crates/router-engine/src/adaptive.rs",
+  "toolName": "Edit",
+  "file": "crates/router-engine/src/strategies/plugin.rs",
   "outcome": "clear",
   "coverage": "complete",
   "findingCount": 0,
-  "durationMs": 7,
+  "durationMs": 10,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }
