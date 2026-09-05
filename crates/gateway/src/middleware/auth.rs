@@ -15,7 +15,7 @@ pub async fn auth_middleware(
 ) -> Result<Response, StatusCode> {
     // 健康检查和管理接口不需要认证
     let path = req.uri().path().to_string();
-    if path == "/health" || path.starts_with("/admin/") {
+    if path == "/health" || path.starts_with("/health/") || path.starts_with("/admin/") {
         return Ok(next.run(req).await);
     }
 
