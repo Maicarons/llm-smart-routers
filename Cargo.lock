@@ -1273,6 +1273,7 @@ dependencies = [
  "llm-smart-router-provider",
  "llm-smart-router-router-engine",
  "llm-smart-router-storage",
+ "reqwest",
  "serde",
  "serde_json",
  "thiserror",
