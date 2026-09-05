@@ -16,6 +16,7 @@ use llm_smart_router_router_engine::pipeline::RouterEngine;
 use llm_smart_router_storage::cache::Cache;
 use llm_smart_router_storage::duckdb::AnalyticsDB;
 use llm_smart_router_storage::json_store::JsonStore;
+use crate::routes::metrics::MetricsCollector;
 
 /// 应用共享状态
 pub struct AppState {
@@ -24,6 +25,7 @@ pub struct AppState {
     pub analytics: AnalyticsDB,
     pub config: JsonStore,
     pub api_keys: Vec<String>,
+    pub metrics: MetricsCollector,
 }
 
 #[tokio::main]
@@ -69,12 +71,14 @@ async fn main() -> anyhow::Result<()> {
     let router = RouterEngine::new(breaker, registry);
 
     // 创建共享状态
+    let metrics = MetricsCollector::new();
     let state = Arc::new(AppState {
         router,
         cache,
         analytics,
         config,
         api_keys: vec!["sk-local-dev".to_string()],
+        metrics,
     });
 
     // 构建路由
@@ -84,6 +88,8 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/responses", post(routes::responses::handler))
         .route("/v1/models", get(routes::models::handler))
         .route("/health", get(routes::health::handler))
+        .route("/health/metrics", get(routes::metrics::metrics_handler))
+        .route("/health/detail", get(routes::metrics::health_detail_handler))
         .route("/admin/providers", post(routes::admin::register_provider))
         .route("/admin/providers", get(routes::admin::list_providers))
         .layer(axum_middleware::from_fn_with_state(

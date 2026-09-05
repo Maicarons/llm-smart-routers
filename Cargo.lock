@@ -1267,6 +1267,7 @@ dependencies = [
  "anyhow",
  "axum",
  "chrono",
+ "dashmap",
  "llm-smart-router-circuit-breaker",
  "llm-smart-router-protocol",
  "llm-smart-router-provider",
