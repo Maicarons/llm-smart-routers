@@ -1321,11 +1321,13 @@ dependencies = [
  "llm-smart-router-circuit-breaker",
  "llm-smart-router-protocol",
  "llm-smart-router-provider",
+ "llm-smart-router-storage",
  "serde",
  "serde_json",
  "thiserror",
  "tokio",
  "tracing",
+ "uuid",
 ]
 
 [[package]]

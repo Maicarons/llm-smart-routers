@@ -8,6 +8,7 @@ license.workspace = true
 llm-smart-router-protocol = { path = "../protocol" }
 llm-smart-router-circuit-breaker = { path = "../circuit-breaker" }
 llm-smart-router-provider = { path = "../provider" }
+llm-smart-router-storage = { path = "../storage" }
 
 dashmap.workspace = true
 serde.workspace = true
@@ -17,3 +18,4 @@ tokio.workspace = true
 tracing.workspace = true
 anyhow.workspace = true
 thiserror.workspace = true
+uuid.workspace = true
