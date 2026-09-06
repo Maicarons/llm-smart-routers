@@ -1,6 +1,6 @@
 {
   "schema_version": "mimosa-task-review/v2",
-  "run_id": "20260905T175206418Z-21208-ca0b8bb9eb65",
+  "run_id": "20260905T175554441Z-22428-e051738a0ceb",
   "run_status": "completed",
   "errors": [],
   "coverage": {
@@ -9,35 +9,35 @@
     "scope": "hook_observed_diff",
     "baseline": {
       "complete": true,
-      "captured_files": 68,
+      "captured_files": 69,
       "candidate_limit": 5000,
       "truncated": false,
       "enumeration_error_count": 0,
       "snapshot_error_count": 0,
-      "compensated_target_count": 7
+      "compensated_target_count": 4
     },
     "change_tracking": {
-      "touched_observed": 7,
-      "touched_retained": 7,
+      "touched_observed": 4,
+      "touched_retained": 4,
       "truncated": false,
       "bash_mutation": true,
-      "bash_discovered": 7,
+      "bash_discovered": 4,
       "bash_discovery_limit": 80,
       "bash_discovery_truncated": false
     },
     "candidates": {
-      "eligible_files": 7,
-      "selected_files": 7,
+      "eligible_files": 4,
+      "selected_files": 4,
       "limit": 20,
       "truncated": false
     },
     "scanning": {
-      "required_files": 7,
-      "scanned_files": 7,
+      "required_files": 1,
+      "scanned_files": 1,
       "skipped_files": 0,
       "failed_files": 0,
-      "project_checks_required": 0,
-      "project_checks_completed": 0
+      "project_checks_required": 2,
+      "project_checks_completed": 2
     },
     "notification": {
       "eligible_findings": 0,
@@ -49,151 +49,66 @@
     "reasons": [],
     "reasons_truncated": false
   },
-  "generated_at": "2026-09-05T17:52:06.418Z",
+  "generated_at": "2026-09-05T17:55:54.441Z",
   "session_id": "sess_4325e14d-5897-4727-bdda-b8771f05ee25",
   "target": ".",
-  "revision": "b9f033d5d2d572c2c142aeaa8dbfdd259fa17206",
+  "revision": "66e314911dc0de02de7483969ce4372609411236",
   "rules_version": "unavailable",
-  "diff_hash": "4c2332758ee9a3d2dee8e48ff057019ddc87fa8e5c5e42c0237ef26006972a3f",
+  "diff_hash": "46df96fd7714196527ed2e50a09f09dc52c531c3185d8ed715dad3afe33645f5",
   "diff": {
     "algorithm": "sha256",
-    "changed_file_count": 7,
+    "changed_file_count": 4,
     "changed_files": [
       {
-        "file": "crates/gateway/src/main.rs",
+        "file": ".github/workflows/ci.yml",
         "ranges": [
           {
-            "start": 50,
-            "end": 63
-          },
-          {
-            "start": 66,
-            "end": 66
+            "start": 46,
+            "end": 46
           }
         ],
-        "before_hash": "dc13d15d749684bdeb106172758a6553d59caf4d1323fc3f6ff4e580ecdd7a5e",
-        "after_hash": "0f166259083a16a5bc2d91b76e37dda220ca04668270bbc291c6da7c1d355977"
+        "before_hash": "afe6771606f0b9e23b2814037cdc929713ebdd6cf1c489315bc449936a7fc42c",
+        "after_hash": "e87188d25c525a803bde21dc266561bb9b5118311630c409ff3467ed518dabe4"
       },
       {
-        "file": "crates/gateway/src/routes/admin.rs",
+        "file": ".github/workflows/docs.yml",
         "ranges": [
           {
-            "start": 20,
-            "end": 20
-          },
-          {
-            "start": 26,
-            "end": 26
-          },
-          {
-            "start": 33,
-            "end": 33
+            "start": 1,
+            "end": 51
           }
         ],
-        "before_hash": "7726556e0c5777df363ca8cd9bf560ab66ebd1f5fdd27cd9f3dbf6af134dbed7",
-        "after_hash": "a4192f65cd0469b24b1b710ef38e229bde566db5452d3be831db322276430863"
+        "before_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "after_hash": "f35b3ac457035d4164d5c5b6a39891ac72ec148b51dd83996822e6dceeea99c5"
       },
       {
-        "file": "crates/gateway/tests/integration_real.rs",
+        "file": "Cargo.toml",
         "ranges": [
-          {
-            "start": 84,
-            "end": 92
-          },
-          {
-            "start": 154,
-            "end": 158
-          },
-          {
-            "start": 191,
-            "end": 195
-          },
-          {
-            "start": 212,
-            "end": 212
-          }
-        ],
-        "before_hash": "782bac80f11ce381ab4152346f7cd59d796e907bca7a4b195c0975bd7d8da36b",
-        "after_hash": "0eb8f94ba7e24e870a5ca64725dc74360db38e493e166695a0cdc8cc187ccfea"
-      },
-      {
-        "file": "crates/provider/src/adapters/anthropic.rs",
-        "ranges": [
-          {
-            "start": 12,
-            "end": 12
-          },
           {
             "start": 16,
             "end": 16
-          },
-          {
-            "start": 21,
-            "end": 30
-          },
-          {
-            "start": 76,
-            "end": 76
           }
         ],
-        "before_hash": "d4a7538044c041dfe218c72c200d24e27cfff4ec12f8081ba93cb7da430522df",
-        "after_hash": "4c14a2b5e54a1c06bf56b6e4e5ac7b110b821d3cc1ff3b4ad047579caed62e72"
+        "before_hash": "2d8e102de9afd054ee62661462ebdb9083323ca2808051cc49e1168d1979db00",
+        "after_hash": "171ec649a65bcde73da0540db8d12a1d88daf92747f933ee132b88f2b4b26dc2"
       },
       {
-        "file": "crates/provider/src/adapters/mod.rs",
+        "file": "docs/.vitepress/config.ts",
         "ranges": [
           {
-            "start": 8,
-            "end": 9
-          },
-          {
-            "start": 13,
-            "end": 14
+            "start": 65,
+            "end": 65
           }
         ],
-        "before_hash": "43ec486e65e8b6ba057bb96631516509cd0be22071feb12dcb01c38bdf2e4c3d",
-        "after_hash": "62724e3552dec501f09c3d5a217953752b3121d57ece0836f3fc124fa7b705d1"
-      },
-      {
-        "file": "crates/provider/src/adapters/openai.rs",
-        "ranges": [
-          {
-            "start": 12,
-            "end": 12
-          },
-          {
-            "start": 16,
-            "end": 16
-          },
-          {
-            "start": 21,
-            "end": 30
-          },
-          {
-            "start": 91,
-            "end": 91
-          }
-        ],
-        "before_hash": "e9a0f17f0180839d4eb24676b49da14ebf574e172244db98848bdfa918b1970b",
-        "after_hash": "df1ad83c2fcefdd6810dcb644623be475aed3311a72e55a9ba945e2febe8f922"
-      },
-      {
-        "file": "crates/router-engine/src/pipeline.rs",
-        "ranges": [
-          {
-            "start": 38,
-            "end": 38
-          }
-        ],
-        "before_hash": "2196375dd2dc90e4a373ee16841349d6d4a8064e930e91e25ac45de01d26af40",
-        "after_hash": "8e24d7fa967691b3e63260a5120acdb9901b4b363af65b1bb8667f0d5f6a6894"
+        "before_hash": "a3084202956e028ea2728e880c636f93c4413ff5f04483688bc099a9e73f641b",
+        "after_hash": "aa2a4584784b7153dbc634b7733ecfe69024fc7773b521745606d76d4f63e3fd"
       }
     ]
   },
   "timing": {
-    "started_at": "2026-09-05T17:52:05.362Z",
-    "completed_at": "2026-09-05T17:52:06.418Z",
-    "duration_ms": 1056,
+    "started_at": "2026-09-05T17:55:52.814Z",
+    "completed_at": "2026-09-05T17:55:54.441Z",
+    "duration_ms": 1627,
     "measurement": "hook_wall_clock"
   },
   "tokens": {
@@ -208,10 +123,10 @@
     "profile": "gate",
     "operation": "Stop",
     "outcome": "complete",
-    "latencyMs": 1056,
-    "peakMemoryBytes": 130924544,
+    "latencyMs": 1627,
+    "peakMemoryBytes": 128290816,
     "memoryMeasurement": "max-observed-process-rss",
-    "scannedFiles": 7,
+    "scannedFiles": 1,
     "cache": {
       "hits": 0,
       "misses": 0,
@@ -236,8 +151,8 @@
   "finding_events": [],
   "findings": [],
   "artifacts": {
-    "immutable_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25-20260905T175206418Z-21208-ca0b8bb9eb65.json",
+    "immutable_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25-20260905T175554441Z-22428-e051738a0ceb.json",
     "latest_report": ".mimosa/reports/task-review-sess_4325e14d-5897-4727-bdda-b8771f05ee25.json",
-    "history_summary": ".mimosa/history/run-20260905T175206418Z-21208-ca0b8bb9eb65.json"
+    "history_summary": ".mimosa/history/run-20260905T175554441Z-22428-e051738a0ceb.json"
   }
 }
