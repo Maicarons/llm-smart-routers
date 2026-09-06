@@ -45,7 +45,15 @@ async fn main() -> anyhow::Result<()> {
     // 加载提供商配置
     let registry = Arc::new(ProviderRegistry::new());
     if let Ok(providers) = config.load_providers() {
-        for p in providers {
+        for mut p in providers {
+            // 从环境变量替换 API Key（config 中 ${VAR_NAME} 格式）
+            if p.api_key.starts_with("${") && p.api_key.ends_with('}') {
+                let var_name = &p.api_key[2..p.api_key.len() - 1];
+                p.api_key = std::env::var(var_name).unwrap_or_else(|_| {
+                    tracing::warn!("environment variable {} not set, using empty key", var_name);
+                    String::new()
+                });
+            }
             let model_ids: Vec<String> = p.models.iter().map(|m| m.id.clone()).collect();
             let is_openai = p.name.eq_ignore_ascii_case("openai");
             let is_anthropic = p.name.eq_ignore_ascii_case("anthropic");
