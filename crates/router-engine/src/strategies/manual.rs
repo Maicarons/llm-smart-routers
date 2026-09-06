@@ -1,7 +1,7 @@
-use async_trait::async_trait;
-use llm_smart_router_provider::registry::ModelInfo;
 use super::super::models::*;
 use super::Strategy;
+use async_trait::async_trait;
+use llm_smart_router_provider::registry::ModelInfo;
 
 /// 手动指定策略：使用用户指定的模型，失败时尝试 fallback
 pub struct ManualStrategy {
@@ -24,7 +24,11 @@ impl Strategy for ManualStrategy {
         "manual"
     }
 
-    async fn select(&self, models: &[ModelInfo], context: &RouteContext) -> anyhow::Result<RouteDecision> {
+    async fn select(
+        &self,
+        models: &[ModelInfo],
+        context: &RouteContext,
+    ) -> anyhow::Result<RouteDecision> {
         let target = if context.model_hint.is_empty() || context.model_hint == "auto" {
             &self.model
         } else {

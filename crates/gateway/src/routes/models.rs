@@ -1,14 +1,9 @@
-use std::sync::Arc;
-use axum::{
-    extract::State,
-    response::Json,
-};
-use serde_json::{json, Value};
 use crate::AppState;
+use axum::{extract::State, response::Json};
+use serde_json::{json, Value};
+use std::sync::Arc;
 
-pub async fn handler(
-    State(state): State<Arc<AppState>>,
-) -> Json<Value> {
+pub async fn handler(State(state): State<Arc<AppState>>) -> Json<Value> {
     let models = state.router.registry.list_models();
     Json(json!({
         "object": "list",

@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::classifier::TaskType;
+use serde::{Deserialize, Serialize};
 
 /// 评分因子权重配置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -70,7 +70,7 @@ pub struct ModelCapabilityProfile {
     pub success_rate: f64,
     pub quality_score: f64,
     pub health_score: f64,
-    pub task_scores: Vec<(TaskType, f64)>,  // 各任务类型的适用性评分
+    pub task_scores: Vec<(TaskType, f64)>, // 各任务类型的适用性评分
 }
 
 impl ModelCapabilityProfile {
@@ -170,7 +170,13 @@ impl Scorer {
     /// 计算模型总分
     pub fn score(&self, profile: &ModelCapabilityProfile, task_type: Option<TaskType>) -> f64 {
         let capability = task_type
-            .and_then(|t| profile.task_scores.iter().find(|(task, _)| *task == t).map(|(_, s)| *s))
+            .and_then(|t| {
+                profile
+                    .task_scores
+                    .iter()
+                    .find(|(task, _)| *task == t)
+                    .map(|(_, s)| *s)
+            })
             .unwrap_or(profile.quality_score);
 
         let price = self.normalize_price(profile.price_per_million_input);
@@ -231,7 +237,12 @@ mod tests {
 
         let score_4o = scorer.score(&gpt4, Some(TaskType::CodeGeneration));
         let score_35 = scorer.score(&gpt35, Some(TaskType::CodeGeneration));
-        assert!(score_4o > score_35, "gpt-4o ({}) should score higher than gpt-3.5 ({})", score_4o, score_35);
+        assert!(
+            score_4o > score_35,
+            "gpt-4o ({}) should score higher than gpt-3.5 ({})",
+            score_4o,
+            score_35
+        );
     }
 
     #[test]
@@ -242,17 +253,26 @@ mod tests {
 
         let score_expensive = scorer.score(&expensive, Some(TaskType::GeneralQa));
         let score_cheap = scorer.score(&cheap, Some(TaskType::GeneralQa));
-        assert!(score_cheap > score_expensive, "cheaper model ({}) should score higher in cost mode ({})", score_cheap, score_expensive);
+        assert!(
+            score_cheap > score_expensive,
+            "cheaper model ({}) should score higher in cost mode ({})",
+            score_cheap,
+            score_expensive
+        );
     }
 
     #[test]
     fn test_task_scores_differ() {
         let profile = ModelCapabilityProfile::estimate("gpt-4o", "openai");
-        let code_score = profile.task_scores.iter()
+        let code_score = profile
+            .task_scores
+            .iter()
             .find(|(t, _)| *t == TaskType::CodeGeneration)
             .map(|(_, s)| *s)
             .unwrap();
-        let qa_score = profile.task_scores.iter()
+        let qa_score = profile
+            .task_scores
+            .iter()
             .find(|(t, _)| *t == TaskType::GeneralQa)
             .map(|(_, s)| *s)
             .unwrap();

@@ -1,6 +1,6 @@
-use std::collections::VecDeque;
-use chrono::{DateTime, Utc};
 use super::state::ErrorType;
+use chrono::{DateTime, Utc};
+use std::collections::VecDeque;
 
 /// 时间桶
 #[derive(Debug, Clone)]
@@ -95,7 +95,8 @@ impl SlidingWindow {
         let mut success_count = 0u64;
         let mut failure_count = 0u64;
         let mut all_latencies: Vec<u64> = Vec::new();
-        let mut error_type_counts: std::collections::HashMap<String, u64> = std::collections::HashMap::new();
+        let mut error_type_counts: std::collections::HashMap<String, u64> =
+            std::collections::HashMap::new();
 
         for bucket in &self.buckets {
             total_requests += bucket.success_count + bucket.failure_count;
@@ -152,7 +153,7 @@ mod tests {
         sw.record_success(100);
         sw.record_success(200);
         sw.record_failure(ErrorType::Timeout);
-        
+
         let stats = sw.stats();
         assert_eq!(stats.total_requests, 3);
         assert_eq!(stats.success_count, 2);

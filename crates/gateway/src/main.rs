@@ -1,22 +1,22 @@
 mod middleware;
 mod routes;
 
-use std::sync::Arc;
 use axum::{
-    Router,
-    routing::{get, post},
     middleware as axum_middleware,
+    routing::{get, post},
+    Router,
 };
+use std::sync::Arc;
 use tower_http::trace::TraceLayer;
 
-use llm_smart_router_circuit_breaker::CircuitBreaker;
+use crate::routes::metrics::MetricsCollector;
 use llm_smart_router_circuit_breaker::config::Config as BreakerConfig;
+use llm_smart_router_circuit_breaker::CircuitBreaker;
 use llm_smart_router_provider::registry::ProviderRegistry;
 use llm_smart_router_router_engine::pipeline::RouterEngine;
 use llm_smart_router_storage::cache::Cache;
 use llm_smart_router_storage::duckdb::AnalyticsDB;
 use llm_smart_router_storage::json_store::JsonStore;
-use crate::routes::metrics::MetricsCollector;
 
 /// 应用共享状态
 pub struct AppState {
@@ -33,8 +33,7 @@ async fn main() -> anyhow::Result<()> {
     // 初始化日志
     tracing_subscriber::fmt()
         .with_env_filter(
-            tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "info".into())
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| "info".into()),
         )
         .init();
 
@@ -51,19 +50,33 @@ async fn main() -> anyhow::Result<()> {
             let is_openai = p.name.eq_ignore_ascii_case("openai");
             let is_anthropic = p.name.eq_ignore_ascii_case("anthropic");
 
-            let adapter: Arc<dyn llm_smart_router_provider::registry::ProviderAdapter> = if is_openai {
-                llm_smart_router_provider::adapters::create_openai(
-                    p.api_key, Some(p.api_base_url), model_ids.clone())
-            } else if is_anthropic {
-                llm_smart_router_provider::adapters::create_anthropic(
-                    p.api_key, Some(p.api_base_url), model_ids.clone())
-            } else {
-                tracing::warn!("unknown provider type: {}, defaulting to OpenAI", p.name);
-                llm_smart_router_provider::adapters::create_openai(
-                    p.api_key, Some(p.api_base_url), model_ids.clone())
-            };
+            let adapter: Arc<dyn llm_smart_router_provider::registry::ProviderAdapter> =
+                if is_openai {
+                    llm_smart_router_provider::adapters::create_openai(
+                        p.api_key,
+                        Some(p.api_base_url),
+                        model_ids.clone(),
+                    )
+                } else if is_anthropic {
+                    llm_smart_router_provider::adapters::create_anthropic(
+                        p.api_key,
+                        Some(p.api_base_url),
+                        model_ids.clone(),
+                    )
+                } else {
+                    tracing::warn!("unknown provider type: {}, defaulting to OpenAI", p.name);
+                    llm_smart_router_provider::adapters::create_openai(
+                        p.api_key,
+                        Some(p.api_base_url),
+                        model_ids.clone(),
+                    )
+                };
             registry.register(&p.name, adapter);
-            tracing::info!("registered provider: {} with {} models", p.name, model_ids.len());
+            tracing::info!(
+                "registered provider: {} with {} models",
+                p.name,
+                model_ids.len()
+            );
         }
     }
 
@@ -86,13 +99,19 @@ async fn main() -> anyhow::Result<()> {
 
     // 构建路由
     let app = Router::new()
-        .route("/v1/chat/completions", post(routes::chat_completions::handler))
+        .route(
+            "/v1/chat/completions",
+            post(routes::chat_completions::handler),
+        )
         .route("/v1/messages", post(routes::messages::handler))
         .route("/v1/responses", post(routes::responses::handler))
         .route("/v1/models", get(routes::models::handler))
         .route("/health", get(routes::health::handler))
         .route("/health/metrics", get(routes::metrics::metrics_handler))
-        .route("/health/detail", get(routes::metrics::health_detail_handler))
+        .route(
+            "/health/detail",
+            get(routes::metrics::health_detail_handler),
+        )
         .route("/admin/providers", post(routes::admin::register_provider))
         .route("/admin/providers", get(routes::admin::list_providers))
         .layer(axum_middleware::from_fn_with_state(

@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::config::Config;
+use serde::{Deserialize, Serialize};
 
 /// 熔断器状态
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]

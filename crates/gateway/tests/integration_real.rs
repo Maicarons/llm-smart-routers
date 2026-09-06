@@ -80,16 +80,22 @@ async fn test_chat_completions_real() {
     let status = resp.status();
     let body: serde_json::Value = resp.json().await.unwrap();
     if status == 200 {
-        let content = body["choices"][0]["message"]["content"].as_str().unwrap_or("");
+        let content = body["choices"][0]["message"]["content"]
+            .as_str()
+            .unwrap_or("");
         // Some models (like deepseek) may return empty content for thinking models
         if !content.is_empty() {
             println!("✓ Chat Completions: {:.60}", content);
         } else {
             println!("✓ Chat Completions: received (empty content - thinking model)");
         }
-        println!("  Model: {} | Tokens: {} in/{} out | Finish: {}",
-            body["model"], body["usage"]["prompt_tokens"], body["usage"]["completion_tokens"],
-            body["choices"][0]["finish_reason"]);
+        println!(
+            "  Model: {} | Tokens: {} in/{} out | Finish: {}",
+            body["model"],
+            body["usage"]["prompt_tokens"],
+            body["usage"]["completion_tokens"],
+            body["choices"][0]["finish_reason"]
+        );
     } else {
         println!("⚠ Chat Completions returned {}: {}", status, body);
     }
@@ -185,7 +191,8 @@ async fn test_responses_api_real() {
             let status = response.status();
             let body: serde_json::Value = response.json().await.unwrap();
             if status == 200 {
-                let text = body["output"][0]["content"][0]["text"].as_str()
+                let text = body["output"][0]["content"][0]["text"]
+                    .as_str()
                     .or_else(|| body["output"][0]["text"].as_str())
                     .unwrap_or("");
                 if !text.is_empty() {

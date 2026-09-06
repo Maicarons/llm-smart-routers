@@ -1,8 +1,8 @@
-use std::sync::atomic::{AtomicUsize, Ordering};
-use async_trait::async_trait;
-use llm_smart_router_provider::registry::ModelInfo;
 use super::super::models::*;
 use super::Strategy;
+use async_trait::async_trait;
+use llm_smart_router_provider::registry::ModelInfo;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 /// 负载均衡策略：在可用模型之间轮询分配
 pub struct LoadBalanceStrategy {
@@ -23,7 +23,11 @@ impl Strategy for LoadBalanceStrategy {
         "load_balance"
     }
 
-    async fn select(&self, models: &[ModelInfo], _context: &RouteContext) -> anyhow::Result<RouteDecision> {
+    async fn select(
+        &self,
+        models: &[ModelInfo],
+        _context: &RouteContext,
+    ) -> anyhow::Result<RouteDecision> {
         if models.is_empty() {
             return Err(anyhow::anyhow!("no available models"));
         }
@@ -48,8 +52,16 @@ mod tests {
     async fn test_load_balance_round_robin() {
         let strategy = LoadBalanceStrategy::default();
         let models = vec![
-            ModelInfo { id: "gpt-4o".to_string(), provider: "openai".to_string(), capabilities: vec![] },
-            ModelInfo { id: "claude-3-5-sonnet".to_string(), provider: "anthropic".to_string(), capabilities: vec![] },
+            ModelInfo {
+                id: "gpt-4o".to_string(),
+                provider: "openai".to_string(),
+                capabilities: vec![],
+            },
+            ModelInfo {
+                id: "claude-3-5-sonnet".to_string(),
+                provider: "anthropic".to_string(),
+                capabilities: vec![],
+            },
         ];
         let context = RouteContext {
             model_hint: "auto".to_string(),

@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// 工作空间
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16,7 +16,7 @@ pub struct Workspace {
 /// 工作空间管理器 - 与路由引擎隔离
 pub struct WorkspaceManager {
     workspaces: dashmap::DashMap<String, Workspace>,
-    key_to_workspace: dashmap::DashMap<String, String>,  // api_key → workspace_id
+    key_to_workspace: dashmap::DashMap<String, String>, // api_key → workspace_id
 }
 
 impl WorkspaceManager {
@@ -37,18 +37,36 @@ impl WorkspaceManager {
             key_to_workspace.insert(key.clone(), "default".to_string());
         }
         workspaces.insert("default".to_string(), default);
-        Self { workspaces, key_to_workspace }
+        Self {
+            workspaces,
+            key_to_workspace,
+        }
     }
 
     /// 根据 API Key 获取工作空间
     pub fn get_workspace_by_key(&self, api_key: &str) -> Option<Workspace> {
         let ws_id = self.key_to_workspace.get(api_key)?;
-        self.workspaces.get(ws_id.value()).map(|w| w.value().clone())
+        self.workspaces
+            .get(ws_id.value())
+            .map(|w| w.value().clone())
     }
 
     /// 创建新工作空间
-    pub fn create_workspace(&self, name: &str, keys: Vec<String>, rpm: u64, budget: Option<f64>) -> String {
-        let id = format!("ws_{}", uuid::Uuid::new_v4().to_string().chars().take(8).collect::<String>());
+    pub fn create_workspace(
+        &self,
+        name: &str,
+        keys: Vec<String>,
+        rpm: u64,
+        budget: Option<f64>,
+    ) -> String {
+        let id = format!(
+            "ws_{}",
+            uuid::Uuid::new_v4()
+                .to_string()
+                .chars()
+                .take(8)
+                .collect::<String>()
+        );
         let ws = Workspace {
             id: id.clone(),
             name: name.to_string(),

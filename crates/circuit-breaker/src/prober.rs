@@ -23,7 +23,8 @@ impl Prober {
 
     /// 获取探测间隔
     pub fn interval(&self, model: &str) -> Duration {
-        let is_healthy = self.consecutive_successes
+        let is_healthy = self
+            .consecutive_successes
             .get(model)
             .map(|c| *c >= self.config.recovery_success_count)
             .unwrap_or(false);
@@ -44,7 +45,10 @@ impl Prober {
     pub fn record_result(&self, model: &str, result: &ProbeResult) {
         match result {
             ProbeResult::Success { .. } => {
-                let mut count = self.consecutive_successes.entry(model.to_string()).or_insert(0);
+                let mut count = self
+                    .consecutive_successes
+                    .entry(model.to_string())
+                    .or_insert(0);
                 *count += 1;
             }
             ProbeResult::Failure { .. } => {
@@ -88,7 +92,12 @@ mod tests {
         assert!(prober.is_recovered("test-model"));
 
         // 失败后重置
-        prober.record_result("test-model", &ProbeResult::Failure { error: "timeout".to_string() });
+        prober.record_result(
+            "test-model",
+            &ProbeResult::Failure {
+                error: "timeout".to_string(),
+            },
+        );
         assert!(!prober.is_recovered("test-model"));
     }
 }

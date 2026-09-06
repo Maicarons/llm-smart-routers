@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::classifier::TaskType;
+use serde::{Deserialize, Serialize};
 
 /// 路由决策
 #[derive(Debug, Clone)]

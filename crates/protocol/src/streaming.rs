@@ -15,7 +15,9 @@ pub fn parse_sse_line(line: &str) -> Option<StreamEvent> {
             if let Some(choice) = chunk.choices.first() {
                 if let Some(content) = &choice.delta.content {
                     if !content.is_empty() {
-                        return Some(StreamEvent::Text { delta: content.clone() });
+                        return Some(StreamEvent::Text {
+                            delta: content.clone(),
+                        });
                     }
                 }
                 if let Some(reason) = &choice.finish_reason {
@@ -26,7 +28,10 @@ pub fn parse_sse_line(line: &str) -> Option<StreamEvent> {
                         "content_filter" => FinishReason::ContentFilter,
                         _ => FinishReason::Error,
                     };
-                    return Some(StreamEvent::Finish { reason: finish, usage: None });
+                    return Some(StreamEvent::Finish {
+                        reason: finish,
+                        usage: None,
+                    });
                 }
             }
         }
@@ -59,7 +64,10 @@ pub fn parse_sse_line(line: &str) -> Option<StreamEvent> {
                         completion_tokens: u.output_tokens,
                         total_tokens: u.input_tokens + u.output_tokens,
                     });
-                    Some(StreamEvent::Finish { reason, usage: usage_info })
+                    Some(StreamEvent::Finish {
+                        reason,
+                        usage: usage_info,
+                    })
                 }
                 _ => None,
             };
@@ -93,10 +101,17 @@ pub fn encode_sse(event: &StreamEvent) -> String {
             }
             format!("data: {}\n\ndata: [DONE]\n\n", data)
         }
-        StreamEvent::ToolCall { id, name, arguments } => {
-            format!("data: {}\n\n", serde_json::json!({
-                "tool_call": {"id": id, "name": name, "arguments": arguments}
-            }))
+        StreamEvent::ToolCall {
+            id,
+            name,
+            arguments,
+        } => {
+            format!(
+                "data: {}\n\n",
+                serde_json::json!({
+                    "tool_call": {"id": id, "name": name, "arguments": arguments}
+                })
+            )
         }
         StreamEvent::Error { message } => {
             format!("data: {}\n\n", serde_json::json!({"error": message}))

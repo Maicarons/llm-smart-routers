@@ -1,7 +1,7 @@
-use crate::unified::*;
-use crate::openai::*;
 use crate::anthropic::*;
+use crate::openai::*;
 use crate::responses::*;
+use crate::unified::*;
 
 /// 协议转换器 trait
 pub trait Converter: Send + Sync {
@@ -156,7 +156,11 @@ impl Converter for OpenAI {
                     }],
                 };
                 let data = serde_json::to_vec(&chunk)?;
-                Ok(format!("data: {}\n\ndata: [DONE]\n\n", String::from_utf8_lossy(&data)).into_bytes())
+                Ok(format!(
+                    "data: {}\n\ndata: [DONE]\n\n",
+                    String::from_utf8_lossy(&data)
+                )
+                .into_bytes())
             }
             _ => Ok(format!("data: [DONE]\n\n").into_bytes()),
         }
@@ -272,15 +276,14 @@ impl Converter for OpenAIResponses {
         let req: ResponsesRequest = serde_json::from_slice(body)?;
         let input_text = match &req.input {
             ResponseInput::Text(t) => t.clone(),
-            ResponseInput::Items(items) => {
-                items.iter()
-                    .filter_map(|item| match item {
-                        InputItem::User { content } => Some(content.clone()),
-                        _ => None,
-                    })
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            }
+            ResponseInput::Items(items) => items
+                .iter()
+                .filter_map(|item| match item {
+                    InputItem::User { content } => Some(content.clone()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+                .join("\n"),
         };
 
         let messages = vec![UnifiedMessage {
@@ -338,12 +341,8 @@ impl Converter for OpenAIResponses {
 
     fn to_stream_bytes(&self, event: &StreamEvent) -> anyhow::Result<Vec<u8>> {
         match event {
-            StreamEvent::Text { delta } => {
-                Ok(format!("data: {}\n\n", delta).into_bytes())
-            }
-            StreamEvent::Finish { .. } => {
-                Ok(format!("data: [DONE]\n\n").into_bytes())
-            }
+            StreamEvent::Text { delta } => Ok(format!("data: {}\n\n", delta).into_bytes()),
+            StreamEvent::Finish { .. } => Ok(format!("data: [DONE]\n\n").into_bytes()),
             _ => Ok(format!("data: [DONE]\n\n").into_bytes()),
         }
     }
@@ -400,7 +399,11 @@ mod tests {
             model: "gpt-4o".to_string(),
             content: "Hello!".to_string(),
             finish_reason: FinishReason::Stop,
-            usage: TokenUsage { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 },
+            usage: TokenUsage {
+                prompt_tokens: 10,
+                completion_tokens: 5,
+                total_tokens: 15,
+            },
             tool_calls: vec![],
         };
         let output = converter.from_unified_response(&resp).unwrap();
@@ -423,7 +426,11 @@ mod tests {
             model: "claude-3-5-sonnet".to_string(),
             content: "Hello!".to_string(),
             finish_reason: FinishReason::Stop,
-            usage: TokenUsage { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 },
+            usage: TokenUsage {
+                prompt_tokens: 10,
+                completion_tokens: 5,
+                total_tokens: 15,
+            },
             tool_calls: vec![],
         };
         let output = converter.from_unified_response(&resp).unwrap();

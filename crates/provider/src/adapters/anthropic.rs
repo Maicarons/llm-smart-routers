@@ -1,7 +1,7 @@
+use super::super::registry::ProviderAdapter;
 use async_trait::async_trait;
 use llm_smart_router_protocol::anthropic;
 use llm_smart_router_protocol::*;
-use super::super::registry::ProviderAdapter;
 
 const DEFAULT_BASE_URL: &str = "https://api.anthropic.com/v1";
 
@@ -55,7 +55,11 @@ impl AnthropicAdapter {
             system: request.system_prompt.clone(),
             max_tokens: request.max_tokens.unwrap_or(1024),
             metadata: None,
-            stop_sequences: if request.stop_sequences.is_empty() { None } else { Some(request.stop_sequences.clone()) },
+            stop_sequences: if request.stop_sequences.is_empty() {
+                None
+            } else {
+                Some(request.stop_sequences.clone())
+            },
             stream: Some(request.stream),
             temperature: request.temperature,
             top_p: request.top_p,
@@ -80,7 +84,8 @@ impl ProviderAdapter for AnthropicAdapter {
         let anthropic_req = self.build_request(request);
         let url = format!("{}/messages", self.base_url);
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header("x-api-key", &self.api_key)
             .header("anthropic-version", "2023-06-01")
@@ -97,8 +102,13 @@ impl ProviderAdapter for AnthropicAdapter {
             return Err(anyhow::anyhow!("API error ({}): {}", status, error_text));
         }
 
-        let msg_resp: anthropic::MessagesResponse = serde_json::from_slice(&body)
-            .map_err(|e| anyhow::anyhow!("failed to parse response: {} - body: {}", e, String::from_utf8_lossy(&body)))?;
+        let msg_resp: anthropic::MessagesResponse = serde_json::from_slice(&body).map_err(|e| {
+            anyhow::anyhow!(
+                "failed to parse response: {} - body: {}",
+                e,
+                String::from_utf8_lossy(&body)
+            )
+        })?;
 
         let finish_reason = match msg_resp.stop_reason.as_deref() {
             Some("end_turn") => FinishReason::Stop,
@@ -107,7 +117,9 @@ impl ProviderAdapter for AnthropicAdapter {
             _ => FinishReason::Error,
         };
 
-        let content = msg_resp.content.iter()
+        let content = msg_resp
+            .content
+            .iter()
             .filter_map(|block| {
                 if let anthropic::ContentBlock::Text { text } = block {
                     Some(text.clone())

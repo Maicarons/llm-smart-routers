@@ -1,12 +1,8 @@
-use std::sync::Arc;
-use axum::{
-    extract::State,
-    response::Json,
-    http::StatusCode,
-};
-use serde_json::{json, Value};
-use llm_smart_router_storage::json_store::ProviderConfig;
 use crate::AppState;
+use axum::{extract::State, http::StatusCode, response::Json};
+use llm_smart_router_storage::json_store::ProviderConfig;
+use serde_json::{json, Value};
+use std::sync::Arc;
 
 /// 注册提供商
 pub async fn register_provider(
@@ -14,27 +10,29 @@ pub async fn register_provider(
     body: axum::body::Bytes,
 ) -> Result<Json<Value>, (StatusCode, Json<Value>)> {
     let config: ProviderConfig = serde_json::from_slice(&body).map_err(|e| {
-        (StatusCode::BAD_REQUEST, Json(json!({"error": format!("invalid config: {}", e)})))
+        (
+            StatusCode::BAD_REQUEST,
+            Json(json!({"error": format!("invalid config: {}", e)})),
+        )
     })?;
 
     let model_ids: Vec<String> = config.models.iter().map(|m| m.id.clone()).collect();
     let adapter = match config.name.as_str() {
-        "openai" | "OpenAI" => {
-            llm_smart_router_provider::adapters::create_openai(
-                config.api_key.clone(),
-                Some(config.api_base_url.clone()),
-                model_ids,
-            )
-        }
-        "anthropic" | "Anthropic" => {
-            llm_smart_router_provider::adapters::create_anthropic(
-                config.api_key.clone(),
-                Some(config.api_base_url.clone()),
-                model_ids,
-            )
-        }
+        "openai" | "OpenAI" => llm_smart_router_provider::adapters::create_openai(
+            config.api_key.clone(),
+            Some(config.api_base_url.clone()),
+            model_ids,
+        ),
+        "anthropic" | "Anthropic" => llm_smart_router_provider::adapters::create_anthropic(
+            config.api_key.clone(),
+            Some(config.api_base_url.clone()),
+            model_ids,
+        ),
         _ => {
-            return Err((StatusCode::BAD_REQUEST, Json(json!({"error": "unsupported provider type"}))));
+            return Err((
+                StatusCode::BAD_REQUEST,
+                Json(json!({"error": "unsupported provider type"})),
+            ));
         }
     };
 
@@ -46,13 +44,13 @@ pub async fn register_provider(
     providers.push(config);
     let _ = state.config.save_providers(&providers);
 
-    Ok(Json(json!({"status": "ok", "message": "provider registered"})))
+    Ok(Json(
+        json!({"status": "ok", "message": "provider registered"}),
+    ))
 }
 
 /// 列出提供商
-pub async fn list_providers(
-    State(state): State<Arc<AppState>>,
-) -> Json<Value> {
+pub async fn list_providers(State(state): State<Arc<AppState>>) -> Json<Value> {
     let providers = state.config.load_providers().unwrap_or_default();
     Json(json!({
         "providers": providers.iter().map(|p| json!({

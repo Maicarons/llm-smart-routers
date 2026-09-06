@@ -72,7 +72,8 @@ impl ProviderCascading {
 
     /// 注册模型到提供商的映射
     pub fn register_model(&self, model: &str, provider: &str) {
-        self.model_to_provider.insert(model.to_string(), provider.to_string());
+        self.model_to_provider
+            .insert(model.to_string(), provider.to_string());
     }
 
     /// 记录模型健康度，级联影响同提供商的其他模型
@@ -82,7 +83,10 @@ impl ProviderCascading {
             drop(provider);
 
             // 更新提供商健康度
-            let mut entry = self.provider_health.entry(provider_key.clone()).or_insert(1.0);
+            let mut entry = self
+                .provider_health
+                .entry(provider_key.clone())
+                .or_insert(1.0);
             *entry = *entry * (1.0 - self.cascade_factor) + health * self.cascade_factor;
         }
     }
@@ -142,6 +146,10 @@ mod tests {
 
         // gpt-4o-mini 也应受到影响
         let mini_health = pc.effective_health("gpt-4o-mini");
-        assert!(mini_health < 1.0, "gpt-4o-mini health should be affected: {}", mini_health);
+        assert!(
+            mini_health < 1.0,
+            "gpt-4o-mini health should be affected: {}",
+            mini_health
+        );
     }
 }

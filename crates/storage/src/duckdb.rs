@@ -85,7 +85,7 @@ impl AnalyticsDB {
                 total_output_tokens INTEGER,
                 total_cost DOUBLE,
                 PRIMARY KEY (provider, model, date)
-            );"
+            );",
         )?;
         Ok(())
     }
@@ -139,7 +139,13 @@ impl AnalyticsDB {
     }
 
     /// 更新模型画像
-    pub fn update_model_profile(&self, provider: &str, model: &str, latency_ms: u64, success: bool) -> anyhow::Result<()> {
+    pub fn update_model_profile(
+        &self,
+        provider: &str,
+        model: &str,
+        latency_ms: u64,
+        success: bool,
+    ) -> anyhow::Result<()> {
         let conn = self.conn.lock().unwrap();
         conn.execute(
             "INSERT INTO model_profiles (provider, model, p50_latency_ms, p95_latency_ms, success_rate, avg_cost_per_token, quality_score, total_calls, updated_at)

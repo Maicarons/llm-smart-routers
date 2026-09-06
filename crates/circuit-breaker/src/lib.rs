@@ -1,16 +1,16 @@
-pub mod state;
-pub mod sliding_window;
+pub mod config;
 pub mod health_scorer;
 pub mod prober;
+pub mod sliding_window;
+pub mod state;
 pub mod trend_detector;
-pub mod config;
 
-use dashmap::DashMap;
-use state::*;
-use sliding_window::*;
-use health_scorer::*;
-use trend_detector::*;
 use config::*;
+use dashmap::DashMap;
+use health_scorer::*;
+use sliding_window::*;
+use state::*;
+use trend_detector::*;
 
 /// 智能熔断器
 pub struct CircuitBreaker {
@@ -51,23 +51,33 @@ impl CircuitBreaker {
     }
 
     /// 记录一次调用结果
-    pub fn record(&self, model: &str, success: bool, latency_ms: u64, error_type: Option<ErrorType>) {
+    pub fn record(
+        &self,
+        model: &str,
+        success: bool,
+        latency_ms: u64,
+        error_type: Option<ErrorType>,
+    ) {
         // 更新趋势检测器
         if let Some(trend) = self.detectors.get(model) {
             let _ = trend;
         } else {
-            self.detectors.insert(model.to_string(), TrendDetector::new(
-                self.config.latency_trend.ewma_alpha,
-                self.config.latency_trend.acceleration_windows,
-                self.config.latency_trend.p95_threshold_ms,
-            ));
+            self.detectors.insert(
+                model.to_string(),
+                TrendDetector::new(
+                    self.config.latency_trend.ewma_alpha,
+                    self.config.latency_trend.acceleration_windows,
+                    self.config.latency_trend.p95_threshold_ms,
+                ),
+            );
         }
 
-        let mut window = self.windows.entry(model.to_string())
-            .or_insert_with(|| SlidingWindow::new(
+        let mut window = self.windows.entry(model.to_string()).or_insert_with(|| {
+            SlidingWindow::new(
                 self.config.sliding_window.size_seconds,
                 self.config.sliding_window.bucket_count,
-            ));
+            )
+        });
 
         if success {
             window.record_success(latency_ms);
@@ -83,13 +93,16 @@ impl CircuitBreaker {
         let final_health = health * 0.7 + effective_health * 0.3;
 
         let (state, _) = BreakerState::from_health(final_health, &self.config);
-        let mut status = self.states.entry(model.to_string()).or_insert_with(|| BreakerStatus {
-            state: BreakerState::Closed,
-            health_score: 1.0,
-            last_failure: None,
-            failure_count: 0,
-            total_requests: 0,
-        });
+        let mut status = self
+            .states
+            .entry(model.to_string())
+            .or_insert_with(|| BreakerStatus {
+                state: BreakerState::Closed,
+                health_score: 1.0,
+                last_failure: None,
+                failure_count: 0,
+                total_requests: 0,
+            });
 
         status.state = state;
         status.health_score = final_health;
@@ -146,7 +159,11 @@ mod tests {
         }
         // 持续失败，熔断器应该降级
         let health = cb.health_score("test-model").unwrap();
-        assert!(health < 0.7, "breaker should degrade after failures, health: {}", health);
+        assert!(
+            health < 0.7,
+            "breaker should degrade after failures, health: {}",
+            health
+        );
     }
 
     #[test]
@@ -157,6 +174,10 @@ mod tests {
         }
         assert!(cb.check("test-model").is_ok());
         // 持续成功应该保持高健康度
-        assert!(cb.health_score("test-model").unwrap() > 0.5, "health: {}", cb.health_score("test-model").unwrap());
+        assert!(
+            cb.health_score("test-model").unwrap() > 0.5,
+            "health: {}",
+            cb.health_score("test-model").unwrap()
+        );
     }
 }

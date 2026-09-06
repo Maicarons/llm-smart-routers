@@ -39,10 +39,22 @@ pub enum UnifiedContent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ContentPart {
-    Text { text: String },
-    Image { url: String, detail: Option<String> },
-    ToolResult { id: String, content: String },
-    ToolCall { id: String, name: String, arguments: String },
+    Text {
+        text: String,
+    },
+    Image {
+        url: String,
+        detail: Option<String>,
+    },
+    ToolResult {
+        id: String,
+        content: String,
+    },
+    ToolCall {
+        id: String,
+        name: String,
+        arguments: String,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -89,8 +101,19 @@ pub struct ToolCallInfo {
 /// 流式事件
 #[derive(Debug, Clone)]
 pub enum StreamEvent {
-    Text { delta: String },
-    ToolCall { id: String, name: String, arguments: String },
-    Finish { reason: FinishReason, usage: Option<TokenUsage> },
-    Error { message: String },
+    Text {
+        delta: String,
+    },
+    ToolCall {
+        id: String,
+        name: String,
+        arguments: String,
+    },
+    Finish {
+        reason: FinishReason,
+        usage: Option<TokenUsage>,
+    },
+    Error {
+        message: String,
+    },
 }

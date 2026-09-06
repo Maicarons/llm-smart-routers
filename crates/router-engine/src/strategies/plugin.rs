@@ -1,15 +1,19 @@
-use std::collections::HashMap;
-use std::sync::Arc;
+use crate::models::*;
 use async_trait::async_trait;
 use llm_smart_router_provider::registry::ModelInfo;
-use crate::models::*;
+use std::collections::HashMap;
+use std::sync::Arc;
 
 /// 策略插件 trait - 允许用户自定义路由策略
 #[async_trait]
 pub trait StrategyPlugin: Send + Sync {
     fn name(&self) -> &str;
     fn description(&self) -> &str;
-    async fn select(&self, models: &[ModelInfo], context: &RouteContext) -> anyhow::Result<RouteDecision>;
+    async fn select(
+        &self,
+        models: &[ModelInfo],
+        context: &RouteContext,
+    ) -> anyhow::Result<RouteDecision>;
 }
 
 /// 策略插件注册表
@@ -26,7 +30,11 @@ impl StrategyPluginRegistry {
 
     /// 注册插件
     pub fn register(&mut self, plugin: Arc<dyn StrategyPlugin>) {
-        tracing::info!("registering strategy plugin: {} ({})", plugin.name(), plugin.description());
+        tracing::info!(
+            "registering strategy plugin: {} ({})",
+            plugin.name(),
+            plugin.description()
+        );
         self.plugins.insert(plugin.name().to_string(), plugin);
     }
 
@@ -60,15 +68,26 @@ mod tests {
 
     #[async_trait]
     impl StrategyPlugin for TestPlugin {
-        fn name(&self) -> &str { "test" }
-        fn description(&self) -> &str { "test plugin" }
-        async fn select(&self, models: &[ModelInfo], _context: &RouteContext) -> anyhow::Result<RouteDecision> {
-            models.first().map(|m| RouteDecision {
-                provider: m.provider.clone(),
-                model: m.id.clone(),
-                confidence: 1.0,
-                task_type: None,
-            }).ok_or_else(|| anyhow::anyhow!("no models"))
+        fn name(&self) -> &str {
+            "test"
+        }
+        fn description(&self) -> &str {
+            "test plugin"
+        }
+        async fn select(
+            &self,
+            models: &[ModelInfo],
+            _context: &RouteContext,
+        ) -> anyhow::Result<RouteDecision> {
+            models
+                .first()
+                .map(|m| RouteDecision {
+                    provider: m.provider.clone(),
+                    model: m.id.clone(),
+                    confidence: 1.0,
+                    task_type: None,
+                })
+                .ok_or_else(|| anyhow::anyhow!("no models"))
         }
     }
 

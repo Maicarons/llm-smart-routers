@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::sliding_window::WindowStats;
+use serde::{Deserialize, Serialize};
 
 /// 健康度评分配置
 #[derive(Debug, Clone, Serialize, Deserialize)]

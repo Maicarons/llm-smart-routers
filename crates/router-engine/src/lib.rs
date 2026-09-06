@@ -1,12 +1,12 @@
-pub mod pipeline;
-pub mod strategies;
-pub mod models;
-pub mod classifier;
-pub mod scorer;
 pub mod adaptive;
+pub mod classifier;
+pub mod models;
+pub mod pipeline;
+pub mod scorer;
+pub mod strategies;
 
-pub use pipeline::*;
-pub use models::*;
-pub use classifier::*;
-pub use scorer::*;
 pub use adaptive::*;
+pub use classifier::*;
+pub use models::*;
+pub use pipeline::*;
+pub use scorer::*;

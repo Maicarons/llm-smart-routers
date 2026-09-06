@@ -70,11 +70,21 @@ pub struct ResponsesResponse {
 #[serde(tag = "type")]
 pub enum ResponseOutputItem {
     #[serde(rename = "text")]
-    Text { id: String, content: Vec<ResponseTextContent> },
+    Text {
+        id: String,
+        content: Vec<ResponseTextContent>,
+    },
     #[serde(rename = "tool_call")]
-    ToolCall { id: String, name: String, arguments: String },
+    ToolCall {
+        id: String,
+        name: String,
+        arguments: String,
+    },
     #[serde(rename = "reasoning")]
-    Reasoning { id: String, summary: Option<Vec<ResponseTextContent>> },
+    Reasoning {
+        id: String,
+        summary: Option<Vec<ResponseTextContent>>,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

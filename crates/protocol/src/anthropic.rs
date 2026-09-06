@@ -47,9 +47,16 @@ pub enum ContentBlock {
     #[serde(rename = "image")]
     Image { source: ImageSource },
     #[serde(rename = "tool_use")]
-    ToolUse { id: String, name: String, input: serde_json::Value },
+    ToolUse {
+        id: String,
+        name: String,
+        input: serde_json::Value,
+    },
     #[serde(rename = "tool_result")]
-    ToolResult { tool_use_id: String, content: String },
+    ToolResult {
+        tool_use_id: String,
+        content: String,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -103,13 +110,22 @@ pub enum AnthropicStreamEvent {
     #[serde(rename = "message_start")]
     MessageStart { message: MessagesResponse },
     #[serde(rename = "content_block_start")]
-    ContentBlockStart { index: u32, content_block: ContentBlock },
+    ContentBlockStart {
+        index: u32,
+        content_block: ContentBlock,
+    },
     #[serde(rename = "content_block_delta")]
-    ContentBlockDelta { index: u32, delta: ContentBlockDelta },
+    ContentBlockDelta {
+        index: u32,
+        delta: ContentBlockDelta,
+    },
     #[serde(rename = "content_block_stop")]
     ContentBlockStop { index: u32 },
     #[serde(rename = "message_delta")]
-    MessageDelta { delta: MessageDelta, usage: Option<AnthropicUsage> },
+    MessageDelta {
+        delta: MessageDelta,
+        usage: Option<AnthropicUsage>,
+    },
     #[serde(rename = "message_stop")]
     MessageStop,
     #[serde(rename = "ping")]

@@ -1,9 +1,9 @@
+use super::super::classifier::TaskType;
+use super::super::models::*;
+use super::super::scorer::{ModelCapabilityProfile, ScoreWeights, Scorer};
+use super::Strategy;
 use async_trait::async_trait;
 use llm_smart_router_provider::registry::ModelInfo;
-use super::super::models::*;
-use super::super::scorer::{Scorer, ModelCapabilityProfile, ScoreWeights};
-use super::super::classifier::TaskType;
-use super::Strategy;
 
 /// 任务感知评分策略：根据任务类型选择最优模型
 pub struct TaskAwareStrategy {
@@ -32,7 +32,11 @@ impl Strategy for TaskAwareStrategy {
         "task_aware"
     }
 
-    async fn select(&self, models: &[ModelInfo], context: &RouteContext) -> anyhow::Result<RouteDecision> {
+    async fn select(
+        &self,
+        models: &[ModelInfo],
+        context: &RouteContext,
+    ) -> anyhow::Result<RouteDecision> {
         if models.is_empty() {
             return Err(anyhow::anyhow!("no available models"));
         }
@@ -41,7 +45,8 @@ impl Strategy for TaskAwareStrategy {
         let task_type = context.task_type;
 
         // 为每个模型评分
-        let mut scored: Vec<(f64, &ModelInfo)> = models.iter()
+        let mut scored: Vec<(f64, &ModelInfo)> = models
+            .iter()
             .map(|m| {
                 let profile = ModelCapabilityProfile::estimate(&m.id, &m.provider);
                 let score = self.scorer.score(&profile, task_type);
@@ -73,8 +78,16 @@ mod tests {
     async fn test_task_aware_selects_best_model() {
         let strategy = TaskAwareStrategy::default();
         let models = vec![
-            ModelInfo { id: "gpt-4o".to_string(), provider: "openai".to_string(), capabilities: vec![] },
-            ModelInfo { id: "gpt-3.5-turbo".to_string(), provider: "openai".to_string(), capabilities: vec![] },
+            ModelInfo {
+                id: "gpt-4o".to_string(),
+                provider: "openai".to_string(),
+                capabilities: vec![],
+            },
+            ModelInfo {
+                id: "gpt-3.5-turbo".to_string(),
+                provider: "openai".to_string(),
+                capabilities: vec![],
+            },
         ];
         let context = RouteContext {
             model_hint: "auto".to_string(),
@@ -97,6 +110,11 @@ mod tests {
         let score_4o = strategy.scorer.score(&gpt4, Some(TaskType::GeneralQa));
         let score_35 = strategy.scorer.score(&gpt35, Some(TaskType::GeneralQa));
         // 成本敏感模式下，便宜模型得分应接近或超过贵模型
-        assert!(score_35 >= score_4o * 0.7, "cheap model ({}) should not be too far behind expensive ({})", score_35, score_4o);
+        assert!(
+            score_35 >= score_4o * 0.7,
+            "cheap model ({}) should not be too far behind expensive ({})",
+            score_35,
+            score_4o
+        );
     }
 }

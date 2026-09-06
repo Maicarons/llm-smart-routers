@@ -1,17 +1,14 @@
-use std::collections::HashMap;
-use std::sync::Arc;
-use llm_smart_router_protocol::UnifiedRequest;
-use llm_smart_router_circuit_breaker::CircuitBreaker;
-use llm_smart_router_provider::registry::{ProviderRegistry, ModelInfo};
+use super::classifier::Classifier;
 use super::models::*;
 use super::strategies::{
-    Strategy,
-    manual::ManualStrategy,
-    failover::FailoverStrategy,
-    load_balance::LoadBalanceStrategy,
-    task_aware::TaskAwareStrategy,
+    failover::FailoverStrategy, load_balance::LoadBalanceStrategy, manual::ManualStrategy,
+    task_aware::TaskAwareStrategy, Strategy,
 };
-use super::classifier::Classifier;
+use llm_smart_router_circuit_breaker::CircuitBreaker;
+use llm_smart_router_protocol::UnifiedRequest;
+use llm_smart_router_provider::registry::{ModelInfo, ProviderRegistry};
+use std::collections::HashMap;
+use std::sync::Arc;
 
 /// 路由引擎
 pub struct RouterEngine {
@@ -23,15 +20,21 @@ pub struct RouterEngine {
 }
 
 impl RouterEngine {
-    pub fn new(
-        breaker: Arc<CircuitBreaker>,
-        registry: Arc<ProviderRegistry>,
-    ) -> Self {
+    pub fn new(breaker: Arc<CircuitBreaker>, registry: Arc<ProviderRegistry>) -> Self {
         let mut strategies: HashMap<String, Box<dyn Strategy>> = HashMap::new();
         strategies.insert("manual".to_string(), Box::new(ManualStrategy::default()));
-        strategies.insert("failover".to_string(), Box::new(FailoverStrategy::default()));
-        strategies.insert("load_balance".to_string(), Box::new(LoadBalanceStrategy::default()));
-        strategies.insert("task_aware".to_string(), Box::new(TaskAwareStrategy::default()));
+        strategies.insert(
+            "failover".to_string(),
+            Box::new(FailoverStrategy::default()),
+        );
+        strategies.insert(
+            "load_balance".to_string(),
+            Box::new(LoadBalanceStrategy::default()),
+        );
+        strategies.insert(
+            "task_aware".to_string(),
+            Box::new(TaskAwareStrategy::default()),
+        );
 
         Self {
             strategies,
@@ -48,8 +51,13 @@ impl RouterEngine {
         request: &UnifiedRequest,
         context: &RouteContext,
     ) -> anyhow::Result<RouteDecision> {
-        let strategy_name = context.strategy_name.as_deref().unwrap_or(&self.default_strategy);
-        let strategy = self.strategies.get(strategy_name)
+        let strategy_name = context
+            .strategy_name
+            .as_deref()
+            .unwrap_or(&self.default_strategy);
+        let strategy = self
+            .strategies
+            .get(strategy_name)
             .ok_or_else(|| anyhow::anyhow!("unknown strategy: {}", strategy_name))?;
 
         let models = self.registry.list_models();
@@ -58,7 +66,9 @@ impl RouterEngine {
         }
 
         // 分析任务类型
-        let user_text = request.messages.iter()
+        let user_text = request
+            .messages
+            .iter()
             .filter(|m| matches!(m.role, llm_smart_router_protocol::UnifiedRole::User))
             .map(|m| match &m.content {
                 llm_smart_router_protocol::UnifiedContent::Text(t) => t.clone(),
@@ -68,9 +78,14 @@ impl RouterEngine {
             .join(" ");
 
         let classification = self.classifier.classify(&user_text);
-        tracing::debug!("task classification: {:?} (confidence: {:.2})", classification.primary_type.name(), classification.confidence);
+        tracing::debug!(
+            "task classification: {:?} (confidence: {:.2})",
+            classification.primary_type.name(),
+            classification.confidence
+        );
 
-        let available_models: Vec<ModelInfo> = models.into_iter()
+        let available_models: Vec<ModelInfo> = models
+            .into_iter()
             .filter(|m| self.breaker.check(&m.id).is_ok())
             .collect();
 

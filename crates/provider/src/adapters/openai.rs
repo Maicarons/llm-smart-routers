@@ -1,7 +1,7 @@
+use super::super::registry::ProviderAdapter;
 use async_trait::async_trait;
 use llm_smart_router_protocol::openai;
 use llm_smart_router_protocol::*;
-use super::super::registry::ProviderAdapter;
 
 const DEFAULT_BASE_URL: &str = "https://api.openai.com/v1";
 
@@ -73,7 +73,11 @@ impl OpenAIAdapter {
             temperature: request.temperature,
             top_p: request.top_p,
             stream: Some(request.stream),
-            stop: if request.stop_sequences.is_empty() { None } else { Some(request.stop_sequences.clone()) },
+            stop: if request.stop_sequences.is_empty() {
+                None
+            } else {
+                Some(request.stop_sequences.clone())
+            },
             tools: None,
             tool_choice: None,
             user: None,
@@ -95,7 +99,8 @@ impl ProviderAdapter for OpenAIAdapter {
         let openai_req = self.build_request(request);
         let url = format!("{}/chat/completions", self.base_url);
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header("Authorization", format!("Bearer {}", self.api_key))
             .header("Content-Type", "application/json")
@@ -111,10 +116,18 @@ impl ProviderAdapter for OpenAIAdapter {
             return Err(anyhow::anyhow!("API error ({}): {}", status, error_text));
         }
 
-        let chat_resp: openai::ChatCompletionResponse = serde_json::from_slice(&body)
-            .map_err(|e| anyhow::anyhow!("failed to parse response: {} - body: {}", e, String::from_utf8_lossy(&body)))?;
+        let chat_resp: openai::ChatCompletionResponse =
+            serde_json::from_slice(&body).map_err(|e| {
+                anyhow::anyhow!(
+                    "failed to parse response: {} - body: {}",
+                    e,
+                    String::from_utf8_lossy(&body)
+                )
+            })?;
 
-        let finish_reason = match chat_resp.choices.first()
+        let finish_reason = match chat_resp
+            .choices
+            .first()
             .and_then(|c| c.finish_reason.as_deref())
         {
             Some("stop") => FinishReason::Stop,
@@ -124,7 +137,9 @@ impl ProviderAdapter for OpenAIAdapter {
             _ => FinishReason::Error,
         };
 
-        let content = chat_resp.choices.first()
+        let content = chat_resp
+            .choices
+            .first()
             .and_then(|c| c.message.content.as_deref())
             .unwrap_or("")
             .to_string();

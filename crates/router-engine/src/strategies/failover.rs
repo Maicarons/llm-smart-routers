@@ -1,7 +1,7 @@
-use async_trait::async_trait;
-use llm_smart_router_provider::registry::ModelInfo;
 use super::super::models::*;
 use super::Strategy;
+use async_trait::async_trait;
+use llm_smart_router_provider::registry::ModelInfo;
 
 /// 故障转移策略：按优先级依次尝试，失败则切换到下一个
 pub struct FailoverStrategy {
@@ -26,7 +26,11 @@ impl Strategy for FailoverStrategy {
         "failover"
     }
 
-    async fn select(&self, models: &[ModelInfo], _context: &RouteContext) -> anyhow::Result<RouteDecision> {
+    async fn select(
+        &self,
+        models: &[ModelInfo],
+        _context: &RouteContext,
+    ) -> anyhow::Result<RouteDecision> {
         for preferred in &self.priority {
             if let Some(m) = models.iter().find(|m| m.id == *preferred) {
                 return Ok(RouteDecision {
@@ -60,8 +64,16 @@ mod tests {
     async fn test_failover_selects_primary() {
         let strategy = FailoverStrategy::default();
         let models = vec![
-            ModelInfo { id: "gpt-4o".to_string(), provider: "openai".to_string(), capabilities: vec![] },
-            ModelInfo { id: "claude-3-5-sonnet".to_string(), provider: "anthropic".to_string(), capabilities: vec![] },
+            ModelInfo {
+                id: "gpt-4o".to_string(),
+                provider: "openai".to_string(),
+                capabilities: vec![],
+            },
+            ModelInfo {
+                id: "claude-3-5-sonnet".to_string(),
+                provider: "anthropic".to_string(),
+                capabilities: vec![],
+            },
         ];
         let context = RouteContext {
             model_hint: "auto".to_string(),
@@ -77,9 +89,11 @@ mod tests {
     #[tokio::test]
     async fn test_failover_fallback() {
         let strategy = FailoverStrategy::default();
-        let models = vec![
-            ModelInfo { id: "claude-3-5-sonnet".to_string(), provider: "anthropic".to_string(), capabilities: vec![] },
-        ];
+        let models = vec![ModelInfo {
+            id: "claude-3-5-sonnet".to_string(),
+            provider: "anthropic".to_string(),
+            capabilities: vec![],
+        }];
         let context = RouteContext {
             model_hint: "auto".to_string(),
             strategy_name: None,

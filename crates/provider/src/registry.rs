@@ -1,7 +1,7 @@
-use std::sync::Arc;
 use async_trait::async_trait;
 use dashmap::DashMap;
 use llm_smart_router_protocol::*;
+use std::sync::Arc;
 
 /// 提供商适配器 trait
 #[async_trait]

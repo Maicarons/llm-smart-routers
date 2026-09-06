@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use super::classifier::TaskType;
 use super::scorer::ModelCapabilityProfile;
+use std::collections::HashMap;
 
 /// 调用反馈
 #[derive(Debug, Clone)]
@@ -12,7 +12,7 @@ pub struct CallFeedback {
     pub success: bool,
     pub input_tokens: u32,
     pub output_tokens: u32,
-    pub user_rating: Option<u8>,  // 1-5 用户评分，None 表示无评分
+    pub user_rating: Option<u8>, // 1-5 用户评分，None 表示无评分
 }
 
 /// 模型画像缓存
@@ -30,7 +30,7 @@ pub struct ModelStats {
 /// 自适应优化器
 pub struct AdaptiveOptimizer {
     stats: dashmap::DashMap<String, ModelStats>,
-    task_performance: dashmap::DashMap<(String, TaskType), f64>,  // (model, task) → score
+    task_performance: dashmap::DashMap<(String, TaskType), f64>, // (model, task) → score
 }
 
 impl AdaptiveOptimizer {
@@ -43,15 +43,18 @@ impl AdaptiveOptimizer {
 
     /// 记录一次调用反馈
     pub fn record_feedback(&self, feedback: &CallFeedback) {
-        let mut entry = self.stats.entry(feedback.model.clone()).or_insert_with(|| ModelStats {
-            total_calls: 0,
-            success_count: 0,
-            total_latency: 0,
-            total_input_tokens: 0,
-            total_output_tokens: 0,
-            quality_score: 0.5,
-            task_type_counts: HashMap::new(),
-        });
+        let mut entry = self
+            .stats
+            .entry(feedback.model.clone())
+            .or_insert_with(|| ModelStats {
+                total_calls: 0,
+                success_count: 0,
+                total_latency: 0,
+                total_input_tokens: 0,
+                total_output_tokens: 0,
+                quality_score: 0.5,
+                task_type_counts: HashMap::new(),
+            });
 
         let stats = entry.value_mut();
         stats.total_calls += 1;
@@ -65,13 +68,19 @@ impl AdaptiveOptimizer {
         if let Some(task_type) = &feedback.task_type {
             let key = (feedback.model.clone(), *task_type);
             let mut task_entry = self.task_performance.entry(key).or_insert(0.5);
-            let rating = feedback.user_rating.unwrap_or(if feedback.success { 4 } else { 1 }) as f64;
+            let rating = feedback
+                .user_rating
+                .unwrap_or(if feedback.success { 4 } else { 1 }) as f64;
             *task_entry = *task_entry * 0.9 + (rating / 5.0) * 0.1;
         }
     }
 
     /// 获取模型在特定任务上的调整后评分
-    pub fn adjusted_score(&self, profile: &ModelCapabilityProfile, task_type: Option<TaskType>) -> f64 {
+    pub fn adjusted_score(
+        &self,
+        profile: &ModelCapabilityProfile,
+        task_type: Option<TaskType>,
+    ) -> f64 {
         let mut score = profile.quality_score;
 
         if let Some(task) = task_type {
@@ -96,7 +105,9 @@ impl AdaptiveOptimizer {
     }
 
     pub fn task_score(&self, model: &str, task: TaskType) -> Option<f64> {
-        self.task_performance.get(&(model.to_string(), task)).map(|v| *v.value())
+        self.task_performance
+            .get(&(model.to_string(), task))
+            .map(|v| *v.value())
     }
 }
 
