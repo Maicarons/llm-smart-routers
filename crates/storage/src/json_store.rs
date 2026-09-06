@@ -1,13 +1,12 @@
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-/// 提供商配置（不含 API Key，API Key 通过环境变量或 Admin API 单独管理）
+/// 提供商配置
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProviderConfig {
     pub name: String,
     pub api_base_url: String,
-    #[serde(default, skip_serializing_if = "String::is_empty")]
-    pub api_key: String,  // 仅 Admin API 动态注册时使用，不持久化到 JSON
+    pub api_key: String,
     pub models: Vec<ModelConfig>,
 }
 

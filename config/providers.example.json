@@ -1,0 +1,29 @@
+{
+  "providers": [
+    {
+      "name": "my-openai",
+      "api_base_url": "https://api.openai.com/v1",
+      "api_key": "sk-your-openai-api-key",
+      "models": [
+        { "id": "gpt-4o", "capabilities": ["chat", "vision"] },
+        { "id": "gpt-4o-mini", "capabilities": ["chat"] }
+      ]
+    },
+    {
+      "name": "my-anthropic",
+      "api_base_url": "https://api.anthropic.com/v1",
+      "api_key": "sk-ant-your-anthropic-api-key",
+      "models": [
+        { "id": "claude-3-5-sonnet", "capabilities": ["chat"] }
+      ]
+    },
+    {
+      "name": "my-deepseek",
+      "api_base_url": "https://llmapi.fiblab.net/v1",
+      "api_key": "sk-your-deepseek-api-key",
+      "models": [
+        { "id": "deepseek-v4-flash", "capabilities": ["chat"] }
+      ]
+    }
+  ]
+}

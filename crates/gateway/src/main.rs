@@ -45,22 +45,40 @@ async fn main() -> anyhow::Result<()> {
     // 加载提供商配置
     let registry = Arc::new(ProviderRegistry::new());
     if let Ok(providers) = config.load_providers() {
-        for mut p in providers {
-            // API Key 不从配置文件读取，而是从环境变量获取
-            // 环境变量命名规则: PROVIDER_{NAME}_API_KEY (NAME 为大写)
-            let env_var_name = format!("PROVIDER_{}_API_KEY", p.name.to_uppercase().replace('-', "_"));
-            let api_key = std::env::var(&env_var_name).unwrap_or_else(|_| {
-                // 也兼容旧版配置中直接嵌入的 key（仅开发环境）
-                if !p.api_key.is_empty() && !p.api_key.starts_with("${") {
-                    p.api_key.clone()
+        for p in &providers {
+            let model_ids: Vec<String> = p.models.iter().map(|m| m.id.clone()).collect();
+            let is_openai = p.name.eq_ignore_ascii_case("openai");
+            let is_anthropic = p.name.eq_ignore_ascii_case("anthropic");
+
+            let adapter: Arc<dyn llm_smart_router_provider::registry::ProviderAdapter> =
+                if is_openai {
+                    llm_smart_router_provider::adapters::create_openai(
+                        p.api_key.clone(),
+                        Some(p.api_base_url.clone()),
+                        model_ids.clone(),
+                    )
+                } else if is_anthropic {
+                    llm_smart_router_provider::adapters::create_anthropic(
+                        p.api_key.clone(),
+                        Some(p.api_base_url.clone()),
+                        model_ids.clone(),
+                    )
                 } else {
-                    tracing::warn!(
-                        "API key not found for provider '{}'. Set {} environment variable.",
-                        p.name, env_var_name
-                    );
-                    String::new()
-                }
-            });
+                    tracing::warn!("unknown provider type: {}, defaulting to OpenAI", p.name);
+                    llm_smart_router_provider::adapters::create_openai(
+                        p.api_key.clone(),
+                        Some(p.api_base_url.clone()),
+                        model_ids.clone(),
+                    )
+                };
+            registry.register(&p.name, adapter);
+            tracing::info!(
+                "registered provider: {} with {} models",
+                p.name,
+                model_ids.len()
+            );
+        }
+    }
             let model_ids: Vec<String> = p.models.iter().map(|m| m.id.clone()).collect();
             let is_openai = p.name.eq_ignore_ascii_case("openai");
             let is_anthropic = p.name.eq_ignore_ascii_case("anthropic");
