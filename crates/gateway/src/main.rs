@@ -79,39 +79,6 @@ async fn main() -> anyhow::Result<()> {
             );
         }
     }
-            let model_ids: Vec<String> = p.models.iter().map(|m| m.id.clone()).collect();
-            let is_openai = p.name.eq_ignore_ascii_case("openai");
-            let is_anthropic = p.name.eq_ignore_ascii_case("anthropic");
-
-            let adapter: Arc<dyn llm_smart_router_provider::registry::ProviderAdapter> =
-                if is_openai {
-                    llm_smart_router_provider::adapters::create_openai(
-                        p.api_key,
-                        Some(p.api_base_url),
-                        model_ids.clone(),
-                    )
-                } else if is_anthropic {
-                    llm_smart_router_provider::adapters::create_anthropic(
-                        p.api_key,
-                        Some(p.api_base_url),
-                        model_ids.clone(),
-                    )
-                } else {
-                    tracing::warn!("unknown provider type: {}, defaulting to OpenAI", p.name);
-                    llm_smart_router_provider::adapters::create_openai(
-                        p.api_key,
-                        Some(p.api_base_url),
-                        model_ids.clone(),
-                    )
-                };
-            registry.register(&p.name, adapter);
-            tracing::info!(
-                "registered provider: {} with {} models",
-                p.name,
-                model_ids.len()
-            );
-        }
-    }
 
     // 初始化熔断器
     let breaker = Arc::new(CircuitBreaker::new(BreakerConfig::default()));
